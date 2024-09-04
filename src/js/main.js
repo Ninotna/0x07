@@ -1,10 +1,9 @@
-// src/main.js
-
 import { recipes } from './data/recipes.js'; // Importer les données depuis recipes.js
 import Api from './api/Api.js';              // Importer l'API de gestion des données
 import FilterManager from './components/FilterManager.js'; // Importer le gestionnaire de filtres
 import Dropdown from './components/Dropdown.js'; // Importer la gestion des dropdowns
 import { RecipeCard } from './layout/RecipeCard.js'; // Importer la classe RecipeCard
+import RecipeDisplayManager from './utils/RecipeDisplayManager.js'
 
 // Instanciation de l'API avec les données importées
 const api = new Api(recipes);
@@ -69,8 +68,14 @@ document.getElementById('search-bar').addEventListener('input', (e) =>
 	filterRecipes(searchTerm);
 });
 
-// Initialisation des filtres (si nécessaire)
+// Initialisation des filtres
 filterManager.initFilters();
 
 // Chargement initial des recettes
 renderRecipes(recipes);
+
+// Instancier le RecipeDisplayManager
+const displayManager = new RecipeDisplayManager('recipes-container', 'recipeCount');
+
+// Chargement initial des recettes
+displayManager.renderRecipes(recipes);
