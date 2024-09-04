@@ -22,7 +22,9 @@
       style="background-image: url('../src/assets/design/background_image.jpg')"
     >
       <div class="absolute inset-0 bg-black opacity-50"></div>
-      <div class="relative z-10 flex flex-col items-center justify-center h-full">
+      <div
+        class="relative z-10 flex flex-col items-center justify-center h-full"
+      >
         <img
           src="../src/assets/design/logo.png"
           alt="Les Petits Plats Logo"
@@ -31,6 +33,7 @@
         <div class="w-full max-w-2xl">
           <div class="flex items-center bg-white rounded-full shadow-md">
             <input
+              id="search-bar"
               type="text"
               placeholder="Rechercher une recette, un ingrédient..."
               class="flex-grow p-4 rounded-l-full outline-none"
@@ -70,13 +73,11 @@
             Ingrédients
           </button>
           <div
-            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden"
+            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden z-50"
             id="ingredientsDropdown"
           >
-            <ul class="max-h-48 overflow-y-auto">
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">Coco</li>
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">Citron</li>
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">Sucre</li>
+            <ul id="ingredients-list" class="dropdown-list">
+              <!-- Les éléments <li> seront insérés ici -->
             </ul>
           </div>
         </div>
@@ -90,15 +91,12 @@
             Appareils
           </button>
           <div
-            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden"
+            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden z-50"
             id="appliancesDropdown"
           >
-            <ul class="max-h-48 overflow-y-auto">
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">Blender</li>
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">Four</li>
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">Micro-ondes</li>
-            </ul>
-          </div>
+          <ul id="appliances-list" class="dropdown-list">
+            <!-- Les éléments <li> seront insérés ici -->
+          </ul></div>
         </div>
 
         <!-- Ustensiles Filter -->
@@ -110,57 +108,24 @@
             Ustensiles
           </button>
           <div
-            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden"
+            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden z-50"
             id="utensilsDropdown"
           >
-            <ul class="max-h-48 overflow-y-auto">
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">
-                Cuillère à soupe
-              </li>
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">Verres</li>
-              <li class="p-2 cursor-pointer hover:bg-yellow-100">
-                Presse citron
-              </li>
-            </ul>
-          </div>
+          <ul id="utensils-list" class="dropdown-list">
+            <!-- Les éléments <li> seront insérés ici -->
+          </ul></div>
         </div>
       </div>
     </section>
 
     <!-- Recipe Cards Grid -->
-    <section class="p-8">
+    <div class="container mx-auto px-4">
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+        id="recipes-container"
+        class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        <!-- Recipe Card -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-          <img
-            src="../src/assets/images/Recette01.jpg"
-            alt="Limonade de Coco"
-            class="w-full h-48 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-xl font-semibold mb-2">Limonade de Coco</h3>
-            <p class="text-gray-700 mb-4">
-              Mettre les glaçons à votre goût dans le blender, ajouter le lait,
-              la crème de coco, le jus de 2 citrons et le sucre. Mixer jusqu'à
-              avoir la consistance désirée.
-            </p>
-            <ul class="text-sm text-gray-600">
-              <li>
-                <strong>Ingrédients:</strong> Lait de coco, Jus de citron, Crème
-                de coco, Sucre, Glaçons
-              </li>
-              <li><strong>Appareil:</strong> Blender</li>
-              <li>
-                <strong>Ustensiles:</strong> Cuillère à soupe, Verres, Presse
-                citron
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!-- Vous pouvez répéter le bloc de recette ci-dessus pour chaque recette -->
+        <!-- Les cartes des recettes seront ajoutées ici par JavaScript -->
       </div>
-    </section>
+    </div>
   </body>
 </html>
