@@ -1,53 +1,166 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Les Petits Plats</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Lien vers le fichier CSS généré par Tailwind -->
+    <link href="dist/styles.css" rel="stylesheet" />
+    <!-- Lien vers votre fichier JavaScript principal -->
+    <script type="module" src="./js/main.js"></script>
+  </head>
 
-<body class="bg-gray-100">
-
+  <body class="bg-gray-100">
     <!-- Header with Logo and Search Bar -->
-    <header class="relative bg-cover bg-center h-64" style="background-image: url('path_to_background_image.jpg');">
-        <div class="absolute inset-0 bg-black opacity-50"></div>
-        <div class="relative z-10 flex flex-col items-center justify-center h-full">
-            <img src="logo.png" alt="Les Petits Plats Logo" class="h-12 mb-4">
-            <div class="w-full max-w-2xl">
-                <div class="flex items-center bg-white rounded-full shadow-md">
-                    <input type="text" placeholder="Rechercher une recette, un ingrédient..." class="flex-grow p-4 rounded-l-full outline-none">
-                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-r-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.403 1.403a9 9 0 11-1.414-1.414L15 17z" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+    <header
+      class="relative bg-cover bg-center h-64"
+      style="background-image: url('../src/assets/design/background_image.jpg')"
+    >
+      <div class="absolute inset-0 bg-black opacity-50"></div>
+      <div class="relative z-10 flex flex-col items-center justify-center h-full">
+        <img
+          src="../src/assets/design/logo.png"
+          alt="Les Petits Plats Logo"
+          class="h-12 mb-4"
+        />
+        <div class="w-full max-w-2xl">
+          <div class="flex items-center bg-white rounded-full shadow-md">
+            <input
+              type="text"
+              placeholder="Rechercher une recette, un ingrédient..."
+              class="flex-grow p-4 rounded-l-full outline-none"
+            />
+            <button
+              class="bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-r-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 17h5l-1.403 1.403a9 9 0 11-1.414-1.414L15 17z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
+      </div>
     </header>
+
+    <!-- Filters Section -->
+    <section class="p-8">
+      <div class="flex justify-center space-x-4 mb-8">
+        <!-- Ingrédients Filter -->
+        <div class="relative inline-block w-64">
+          <button
+            class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            id="ingredientsFilter"
+          >
+            Ingrédients
+          </button>
+          <div
+            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden"
+            id="ingredientsDropdown"
+          >
+            <ul class="max-h-48 overflow-y-auto">
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">Coco</li>
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">Citron</li>
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">Sucre</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Appareils Filter -->
+        <div class="relative inline-block w-64">
+          <button
+            class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            id="appliancesFilter"
+          >
+            Appareils
+          </button>
+          <div
+            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden"
+            id="appliancesDropdown"
+          >
+            <ul class="max-h-48 overflow-y-auto">
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">Blender</li>
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">Four</li>
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">Micro-ondes</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Ustensiles Filter -->
+        <div class="relative inline-block w-64">
+          <button
+            class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            id="utensilsFilter"
+          >
+            Ustensiles
+          </button>
+          <div
+            class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden"
+            id="utensilsDropdown"
+          >
+            <ul class="max-h-48 overflow-y-auto">
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">
+                Cuillère à soupe
+              </li>
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">Verres</li>
+              <li class="p-2 cursor-pointer hover:bg-yellow-100">
+                Presse citron
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Recipe Cards Grid -->
     <section class="p-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            <!-- Recipe Card -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="path_to_recipe_image.jpg" alt="Limonade de Coco" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-semibold mb-2">Limonade de Coco</h3>
-                    <p class="text-gray-700 mb-4">Mettre les glaçons à votre goût dans le blender, ajouter le lait, la crème de coco, le jus de 2 citrons et le sucre. Mixer jusqu'à avoir la consistance désirée.</p>
-                    <ul class="text-sm text-gray-600">
-                        <li><strong>Ingrédients:</strong> Lait de coco, Jus de citron, Crème de coco, Sucre, Glaçons</li>
-                        <li><strong>Appareil:</strong> Blender</li>
-                        <li><strong>Ustensiles:</strong> Cuillère à soupe, Verres, Presse citron</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Repeat the above block for each recipe -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+      >
+        <!-- Recipe Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <img
+            src="../src/assets/images/Recette01.jpg"
+            alt="Limonade de Coco"
+            class="w-full h-48 object-cover"
+          />
+          <div class="p-4">
+            <h3 class="text-xl font-semibold mb-2">Limonade de Coco</h3>
+            <p class="text-gray-700 mb-4">
+              Mettre les glaçons à votre goût dans le blender, ajouter le lait,
+              la crème de coco, le jus de 2 citrons et le sucre. Mixer jusqu'à
+              avoir la consistance désirée.
+            </p>
+            <ul class="text-sm text-gray-600">
+              <li>
+                <strong>Ingrédients:</strong> Lait de coco, Jus de citron, Crème
+                de coco, Sucre, Glaçons
+              </li>
+              <li><strong>Appareil:</strong> Blender</li>
+              <li>
+                <strong>Ustensiles:</strong> Cuillère à soupe, Verres, Presse
+                citron
+              </li>
+            </ul>
+          </div>
         </div>
+        <!-- Vous pouvez répéter le bloc de recette ci-dessus pour chaque recette -->
+      </div>
     </section>
-
-</body>
-
+  </body>
 </html>
