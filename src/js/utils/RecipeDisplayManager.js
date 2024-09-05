@@ -1,4 +1,4 @@
-import { RecipeCard } from '../layout/RecipeCard.js'; // Assurez-vous que le chemin est correct
+import  RecipeCard  from '../layout/RecipeCard.js'; 
 
 class RecipeDisplayManager
 {
@@ -21,19 +21,21 @@ class RecipeDisplayManager
 	 * Rend les cartes de recettes dans le conteneur.
 	 * @param {Array} recipes - Le tableau des recettes à afficher.
 	 */
-	renderRecipes(recipes)
-	{
-		// Effacer les résultats précédents
-		this.recipesContainer.innerHTML = '';
-
-		// Parcourir chaque recette et l'ajouter dans le conteneur
-		recipes.forEach((recipe) =>
-		{
-			// Crée une nouvelle instance de RecipeCard
+	renderRecipes(recipes) {
+		const container = document.getElementById('recipes-container');
+		container.innerHTML = ''; // Clear previous results
+	
+		// Check if recipes is a valid array
+		if (!recipes || !Array.isArray(recipes) || recipes.length === 0) {
+			console.error('No recipes found to display');
+			return;
+		}
+	
+		recipes.forEach((recipe) => {
+			// Create a new instance of RecipeCard
 			const recipeCard = new RecipeCard(recipe);
-
-			// Ajouter la carte créée dans le conteneur
-			this.recipesContainer.appendChild(recipeCard.createRecipeCard());
+			// Append the created card to the container
+			container.appendChild(recipeCard.createRecipeCard());
 		});
 
 		// Mettre à jour le compteur de recettes

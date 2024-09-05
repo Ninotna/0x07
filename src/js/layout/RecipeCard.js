@@ -1,4 +1,4 @@
-export class RecipeCard
+export default class RecipeCard
 {
 	constructor(recipe)
 	{
