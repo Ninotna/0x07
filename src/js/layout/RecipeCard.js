@@ -45,7 +45,7 @@ export default class RecipeCard
 		// Description de la recette
 		const description = document.createElement('p');
 		description.textContent = this.recipe.description;
-		description.classList.add('text-14px','text-gray-700', 'mb-4'); // Couleur grise pour le texte
+		description.classList.add('text-14px','text-gray-700', 'mb-4', 'overflow-hidden', 'max-h-[5rem]'); // Couleur grise pour le texte
 		content.appendChild(description);
 
 		// Sous-titre "Ingrédients"
