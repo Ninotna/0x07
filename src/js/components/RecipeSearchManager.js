@@ -8,14 +8,14 @@ class RecipeSearchManager {
   /**
    * Recherche des recettes correspondant au terme donné
    * @param {string} searchTerm - Le terme de recherche entré par l'utilisateur
+   * @returns {Array} - Les recettes filtrées ou un tableau vide
    */
   searchRecipes(searchTerm) {
     const minChars = 3; // Nombre minimal de caractères à entrer
 
     // Vérifier que le terme de recherche contient au moins 3 caractères
     if (searchTerm.length < minChars) {
-      // this.displayNoResultsMessage(searchTerm);
-      return;
+      return []; // Retourner un tableau vide si le terme est trop court
     }
 
     const foundRecipes = []; // Tableau pour stocker les recettes trouvées
@@ -72,22 +72,20 @@ class RecipeSearchManager {
 
   /**
    * Affiche les recettes trouvées
-   * @param {Array} recipes - Les recettes à afficher
+   * @param {Array} filteredRecipes - Les recettes à afficher
    */
-  displayRecipes(filteredRecipes) {
-    const container = document.getElementById(this.containerId);
-    container.innerHTML = ""; // Clear previous results
+  displayRecipes(filteredRecipes, searchTerm) {
+    this.resultContainer.innerHTML = ""; // Vider les résultats précédents
 
     if (!filteredRecipes || filteredRecipes.length === 0) {
-      const messageContainer = document.getElementById(this.messageContainerId);
-      messageContainer.textContent = `No recipes found for your search.`;
+      this.displayNoResultsMessage(searchTerm); // Appeler la fonction d'absence de résultats
       return;
     }
 
-    // Loop through the filtered recipes and display each one
+    // Boucle à travers les recettes filtrées et affiche chaque carte de recette
     filteredRecipes.forEach((recipe) => {
       const recipeCard = new RecipeCard(recipe);
-      container.appendChild(recipeCard.createRecipeCard());
+      this.resultContainer.appendChild(recipeCard.createRecipeCard());
     });
   }
 }

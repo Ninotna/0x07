@@ -3,85 +3,83 @@ class Dropdown {
 		this.button = document.getElementById(buttonId);
 		this.dropdown = document.getElementById(dropdownId);
 		this.filterCallback = filterCallback;
-
-		// Vérifier que les éléments existent
+  
 		if (!this.button || !this.dropdown) {
-			console.error(`Élément introuvable : ${buttonId} ou ${dropdownId}`);
+			console.error(`Element not found: ${buttonId} or ${dropdownId}`);
 			return;
 		}
-
-		// Attacher les événements
+  
 		this.setupEventListeners();
 	}
-
+  
 	setupEventListeners() {
-		// Toggle dropdown visibility lorsque le bouton est cliqué
+		// Toggle dropdown visibility when the button is clicked
 		this.button.addEventListener('click', () => {
-			this.dropdown.classList.toggle('hidden');
+			this.dropdown.classList.toggle('hidden'); // Toggle the 'hidden' class
 		});
-
-		// Écoute les événements d'entrée dans la barre de recherche
+	  
+		// Add search input event listener (if it exists in the dropdown)
 		const searchInput = this.dropdown.querySelector('input[type="text"]');
-		searchInput.addEventListener('input', (event) => {
-			this.filterDropdownItems(event.target.value);  // Appel à la méthode de filtrage
-		});
-
-		this.updateDropdownItems();
-	}
-
-	updateDropdownItems() {
-		// Vérifier que les éléments <li> existent dans la liste
-		const listItems = this.dropdown.querySelectorAll('li');
-		if (listItems.length === 0) {
-			console.warn(`Aucun élément <li> trouvé dans ${this.dropdown.id}`);
-			return;
+		if (searchInput) {
+			searchInput.addEventListener('input', (event) => {
+				this.filterDropdownItems(event.target.value); // Filter dropdown items
+			});
 		}
 
-		// Ajouter des écouteurs d'événements pour chaque élément <li>
+		this.updateDropdownItems(); // Setup event listeners for the dropdown items
+	}
+  
+	// Dynamically update the dropdown with new items
+	updateOptions(items) {
+		const ul = this.dropdown.querySelector('ul');
+		ul.innerHTML = ''; // Clear the current list
+	
+		// Use a Map to store lowercase as the key and original as the value
+		const uniqueItems = new Map();
+	
+		// Loop through items and normalize to lowercase for uniqueness
+		items.forEach((item) => {
+			const lowerCaseItem = item.toLowerCase();
+			if (!uniqueItems.has(lowerCaseItem)) {
+				uniqueItems.set(lowerCaseItem, item); // Store the original item as the value
+			}
+		});
+	
+		// Add unique items to the dropdown
+		uniqueItems.forEach((originalItem) => {
+			const li = document.createElement('li');
+			li.textContent = originalItem; // Display the original casing
+			li.classList.add('px-4', 'py-2', 'text-gray-700', 'hover:bg-gray-100', 'cursor-pointer');
+			ul.appendChild(li);
+		});
+	
+		this.updateDropdownItems(); // Attach event listeners to the new list items
+	}
+	
+	// Update the dropdown items and attach click events
+	updateDropdownItems() {
+		const listItems = this.dropdown.querySelectorAll('li');
 		listItems.forEach((item) => {
 			item.addEventListener('click', () => {
 				const selectedValue = item.textContent;
 				this.filterCallback(selectedValue);
-				this.button.textContent = selectedValue; // Mettre à jour le texte du bouton
-				this.dropdown.classList.add('hidden'); // Masquer le dropdown après sélection
+				this.button.textContent = selectedValue; // Update the button text
+				this.dropdown.classList.add('hidden'); // Hide the dropdown after selection
 			});
 		});
 	}
-
-	/**
-	 * Méthode pour filtrer les éléments du dropdown en fonction de la recherche
-	 * @param {string} searchTerm - Le terme recherché pour filtrer les items
-	 */
+  
+	// Filter dropdown items based on search term
 	filterDropdownItems(searchTerm) {
 		const listItems = this.dropdown.querySelectorAll('li');
 		listItems.forEach((item) => {
 			const itemText = item.textContent.toLowerCase();
 			if (itemText.includes(searchTerm.toLowerCase())) {
-				item.style.display = ''; // Afficher l'élément
+				item.style.display = ''; // Show item if it matches the search term
 			} else {
-				item.style.display = 'none'; // Masquer l'élément
+				item.style.display = 'none'; // Hide item if it doesn't match
 			}
 		});
-	}
-
-	/**
-	 * Ajoute des éléments dynamiques au dropdown
-	 * @param {Array} items - Un tableau des éléments à ajouter au dropdown
-	 */
-	populateDropdown(items) {
-		const ul = this.dropdown.querySelector('ul');
-		ul.innerHTML = ''; // Vider la liste actuelle
-
-		// Ajouter chaque item au dropdown
-		items.forEach((item) => {
-			const li = document.createElement('li');
-			li.textContent = item;
-			li.classList.add('px-4', 'py-2', 'text-gray-700', 'hover:bg-gray-100', 'cursor-pointer');
-			ul.appendChild(li);
-		});
-
-		// Réinitialiser les écouteurs pour les nouveaux items
-		this.updateDropdownItems();
 	}
 }
 
