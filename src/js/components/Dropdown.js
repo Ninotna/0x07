@@ -15,6 +15,7 @@ class Dropdown {
 	setupEventListeners() {
 		// Toggle dropdown visibility when the button is clicked
 		this.button.addEventListener('click', () => {
+			// console.log(this.dropdown);
 			this.dropdown.classList.toggle('hidden'); // Toggle the 'hidden' class
 		});
 	  
@@ -31,30 +32,32 @@ class Dropdown {
   
 	// Dynamically update the dropdown with new items
 	updateOptions(items) {
+		// console.log('Updating options with:', items); // Log the items passed in
 		const ul = this.dropdown.querySelector('ul');
 		ul.innerHTML = ''; // Clear the current list
 	
 		// Use a Map to store lowercase as the key and original as the value
 		const uniqueItems = new Map();
 	
-		// Loop through items and normalize to lowercase for uniqueness
 		items.forEach((item) => {
 			const lowerCaseItem = item.toLowerCase();
 			if (!uniqueItems.has(lowerCaseItem)) {
-				uniqueItems.set(lowerCaseItem, item); // Store the original item as the value
+				uniqueItems.set(lowerCaseItem, item);
 			}
 		});
 	
-		// Add unique items to the dropdown
+		// console.log('Unique Items:', Array.from(uniqueItems.entries())); // Log the unique items
+	
 		uniqueItems.forEach((originalItem) => {
 			const li = document.createElement('li');
-			li.textContent = originalItem; // Display the original casing
+			li.textContent = originalItem;
 			li.classList.add('px-4', 'py-2', 'text-gray-700', 'hover:bg-gray-100', 'cursor-pointer');
 			ul.appendChild(li);
 		});
 	
-		this.updateDropdownItems(); // Attach event listeners to the new list items
+		this.updateDropdownItems();
 	}
+	
 	
 	// Update the dropdown items and attach click events
 	updateDropdownItems() {

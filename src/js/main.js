@@ -5,7 +5,7 @@ import Dropdown from './components/Dropdown.js'; // Importer la gestion des drop
 import RecipeDisplayManager from './utils/RecipeDisplayManager.js'; // Pour l'affichage des recettes
 import RecipeSearchManager from './components/RecipeSearchManager.js'; // Pour la recherche principale
 import RecipeCard  from './layout/RecipeCard.js'; // Adjust path based on file location
-import TagManager from './components/TagManager.js'; // Import the TagManager class
+// import TagManager from './components/TagManager.js'; // Import the TagManager class
 
 
 // Instanciation de l'API avec les données importées
@@ -13,6 +13,9 @@ const api = new Api(recipes);
 
 // Instanciation du gestionnaire de filtres
 const filterManager = new FilterManager(api);
+
+// Instancier la classe TagManager
+// const tagManager = new TagManager(filterManager, 'tags-container');
 
 // Fonction de rendu des cartes de recettes
 function renderRecipes(recipes, searchTerm = '') {
@@ -72,49 +75,49 @@ function filterRecipes(searchTerm) {
 
 
 // Initialisation des dropdowns pour chaque filtre (Filter Search-bar)
-const ingredientsDropdown = new Dropdown(
-    'ingredientsFilter',
-    'ingredientsDropdown',
-    (selectedIngredient) => {
-        const filteredRecipes = api.getRecipesByIngredient(selectedIngredient);
-        renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
+// const ingredientsDropdown = new Dropdown(
+//     'ingredientsFilter',
+//     'ingredientsDropdown',
+//     (selectedIngredient) => {
+//         const filteredRecipes = api.getRecipesByIngredient(selectedIngredient);
+//         renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
         
-        // Ajout du tag pour l'ingrédient sélectionné
-        tagManager.addTag('ingredient', selectedIngredient);
-    }
-);
+//         // Add the selected ingredient as a tag
+//         tagManager.addTag('ingredient', selectedIngredient);
+//     }
+// );
 
-console.log(ingredientsDropdown); // Should show a Dropdown instance
-console.log(typeof ingredientsDropdown.updateOptions); // Should log 'function'
+// console.log(ingredientsDropdown); // Should show a Dropdown instance
+// console.log(typeof ingredientsDropdown.updateOptions); // Should log 'function'
 
 // console.log(ingredientsDropdown); // Check if Dropdown instance is created correctly
 // console.log(typeof ingredientsDropdown.updateOptions); // Should log 'function'
 // console.log(Object.keys(ingredientsDropdown)); // Should include 'updateOptions'
 
 
-const appliancesDropdown = new Dropdown(
-    'appliancesFilter',
-    'appliancesDropdown',
-    (selectedAppliance) => {
-        const filteredRecipes = api.getRecipesByAppliance(selectedAppliance);
-        renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
+// const appliancesDropdown = new Dropdown(
+//     'appliancesFilter',
+//     'appliancesDropdown',
+//     (selectedAppliance) => {
+//         const filteredRecipes = api.getRecipesByAppliance(selectedAppliance);
+//         renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
         
-        // Ajout du tag pour l'appareil sélectionné
-        tagManager.addTag('appliance', selectedAppliance);
-    }
-);
+//         // Ajout du tag pour l'appareil sélectionné
+//         tagManager.addTag('appliance', selectedAppliance);
+//     }
+// );
 
-const utensilsDropdown = new Dropdown(
-    'utensilsFilter',
-    'utensilsDropdown',
-    (selectedUtensil) => {
-        const filteredRecipes = api.getRecipesByUtensil(selectedUtensil);
-        renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
+// const utensilsDropdown = new Dropdown(
+//     'utensilsFilter',
+//     'utensilsDropdown',
+//     (selectedUtensil) => {
+//         const filteredRecipes = api.getRecipesByUtensil(selectedUtensil);
+//         renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
         
-        // Ajout du tag pour l'ustensile sélectionné
-        tagManager.addTag('utensil', selectedUtensil);
-    }
-);
+//         // Ajout du tag pour l'ustensile sélectionné
+//         tagManager.addTag('utensil', selectedUtensil);
+//     }
+// );
 
 // Initialisation des filtres
 filterManager.initFilters();
@@ -150,8 +153,7 @@ document.querySelectorAll('.dropdown-search').forEach((dropdownSearchBar) => {
 // Afficher les recettes initiales
 displayManager.renderRecipes(recipes);
 
-// Instancier la classe TagManager
-const tagManager = new TagManager(filterManager, 'tags-container');
+
 
 // const ingredientsDropdown2 = new Dropdown(
 //     'ingredientsFilter',      // Button ID
@@ -166,3 +168,6 @@ const tagManager = new TagManager(filterManager, 'tags-container');
 
 // ingredientsDropdown.updateOptions(['Tomato1', 'Onion1', 'Garlic1']);
 // ingredientsDropdown.updateOptions(['Carrot', 'Potato', 'Lettuce']);
+
+// Call updateDropdown for the ingredients filter and pass tagManager
+// filterManager.updateDropdown('ingredientsDropdown', ['Lait', 'Crème de coco'], 'ingredient', tagManager);
