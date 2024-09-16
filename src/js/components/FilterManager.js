@@ -14,24 +14,120 @@ export default class FilterManager {
             utensil: []
         };
 
+        this.searchTerm = ''; // Initialize search term
+
         // Initialize dropdowns for ingredients, appliances, and utensils
         this.ingredientsDropdown = new Dropdown('ingredientsFilter', 'ingredientsDropdown', (selectedIngredient) => {
-            this.tagManager.addTag('ingredient', selectedIngredient);
-            this.activeTags.ingredient.push(selectedIngredient);
-            this.updateFiltersBasedOnTags(); // Update filters when a tag is added
+            this.addTagAndUpdate('ingredient', selectedIngredient);
         });
 
         this.appliancesDropdown = new Dropdown('appliancesFilter', 'appliancesDropdown', (selectedAppliance) => {
-            this.tagManager.addTag('appliance', selectedAppliance);
-            this.activeTags.appliance.push(selectedAppliance);
-            this.updateFiltersBasedOnTags(); // Update filters when a tag is added
+            this.addTagAndUpdate('appliance', selectedAppliance);
         });
 
         this.utensilsDropdown = new Dropdown('utensilsFilter', 'utensilsDropdown', (selectedUtensil) => {
-            this.tagManager.addTag('utensil', selectedUtensil);
-            this.activeTags.utensil.push(selectedUtensil);
-            this.updateFiltersBasedOnTags(); // Update filters when a tag is added
+            this.addTagAndUpdate('utensil', selectedUtensil);
         });
+    }
+
+    // Add the selected tag, update activeTags, and render recipes
+    addTagAndUpdate(type, value) {
+        if (!this.activeTags[type].includes(value)) {
+            this.activeTags[type].push(value); // Add tag if not already present
+        }
+        this.tagManager.addTag(type, value); // Add the tag to the TagManager UI
+        this.updateFiltersAndRenderRecipes(); // Update filters and render recipes
+    }
+
+    // Remove the tag, update activeTags and render recipes
+    removeFilter(type, value) {
+        if (!this.activeTags[type]) {
+            console.error(`Invalid tag type: ${type}`);
+            return;
+        }
+
+        // Remove the tag from the activeTags array for the specified type
+        this.activeTags[type] = this.activeTags[type].filter(tag => tag !== value);
+
+        // Update the filters and recipes after removing the tag
+        this.updateFiltersAndRenderRecipes();
+    }
+
+    // **AND Condition**: Filter recipes based on both tags and search term and update dropdowns
+    updateFiltersAndRenderRecipes() {
+        const { ingredient, appliance, utensil } = this.activeTags;
+
+        // Step 1: Filter recipes based on the selected tags
+        let filteredRecipes = this.api.getRecipesByTags(ingredient, appliance, utensil);
+
+        // Step 2: Apply the search term filter ONLY to the recipes already filtered by tags
+        if (this.searchTerm) {
+            filteredRecipes = filteredRecipes.filter(recipe => {
+                return (
+                    recipe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                    recipe.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                    recipe.ingredients.some(ing => ing.ingredient.toLowerCase().includes(this.searchTerm.toLowerCase()))
+                );
+            });
+        }
+
+        // Step 3: Render the filtered recipes
+        this.renderRecipes(filteredRecipes);
+
+        // Step 4: Update the dropdowns (filters) based on the filtered recipes
+        this.updateFiltersBasedOnRecipes(filteredRecipes);
+    }
+
+    // Update the search term and re-filter recipes
+    updateSearchTerm(searchTerm) {
+        this.searchTerm = searchTerm; // Store the search term
+        this.updateFiltersAndRenderRecipes(); // Re-filter recipes based on tags and search term
+    }
+
+    // Update the dropdowns (filters) based on filtered recipes
+    updateFiltersBasedOnRecipes(filteredRecipes) {
+        const ingredients = new Set();
+        const appliances = new Set();
+        const utensils = new Set();
+
+        // Loop through filtered recipes to extract ingredients, appliances, and utensils
+        filteredRecipes.forEach((recipe) => {
+            recipe.ingredients.forEach((ingredient) => {
+                if (ingredient.ingredient) {
+                    ingredients.add(ingredient.ingredient);
+                }
+            });
+            appliances.add(recipe.appliance);
+            recipe.ustensils.forEach((utensil) => utensils.add(utensil));
+        });
+
+        // Update the dropdowns with new filter options
+        this.ingredientsDropdown.updateOptions([...ingredients]);
+        this.appliancesDropdown.updateOptions([...appliances]);
+        this.utensilsDropdown.updateOptions([...utensils]);
+    }
+
+    // Render filtered recipes
+    renderRecipes(recipes) {
+        const container = document.getElementById('recipes-container');
+        const recipeCountElement = document.getElementById('recipeCount');
+
+        container.innerHTML = ''; // Clear previous results
+
+        if (!recipes || recipes.length === 0) {
+            container.innerHTML = '<p class="text-center text-gray-500">Aucune recette trouvée.</p>';
+            recipeCountElement.textContent = '0 recettes affichées'; // Set count to 0
+            return;
+        }
+
+        // Render each recipe card
+        recipes.forEach((recipe) => {
+            const recipeCard = new RecipeCard(recipe);
+            container.appendChild(recipeCard.createRecipeCard());
+        });
+
+        // Update the recipe count AFTER rendering the recipes
+        recipeCountElement.textContent = `${recipes.length} recette${recipes.length > 1 ? 's' : ''} affichée${recipes.length > 1 ? 's' : ''}`;
     }
 
     // Initialize filters and populate dropdowns
@@ -64,100 +160,9 @@ export default class FilterManager {
 
             // Attach event listener to add the tag on click
             li.addEventListener('click', () => {
-                if (tagManager && typeof tagManager.addTag === 'function') {
-                    tagManager.addTag(type, item); // Add tag to the tagManager
-                } else {
-                    console.error('tagManager is not defined or addTag is not a function');
-                }
+                tagManager.addTag(type, item); // Add tag to the tagManager
+                this.addTagAndUpdate(type, item); // Add tag and update the recipes and filters
             });
         });
-    }
-
-    // Update filters based on selected tags
-    updateFiltersBasedOnTags() {
-        const { ingredient, appliance, utensil } = this.activeTags;
-
-        // Filter recipes based on the active tags
-        const filteredRecipes = this.api.getRecipesByTags(ingredient, appliance, utensil);
-
-        // Render filtered recipes
-        this.renderRecipes(filteredRecipes);
-
-        // Update dropdowns (filters) based on the filtered recipes
-        this.updateFiltersBasedOnRecipes(filteredRecipes);
-    }
-
-    // Filter recipes by search term and active tags
-    filterRecipes(searchTerm, searchManager) {
-        // First, filter recipes based on the active tags
-        let filteredRecipes = this.api.getRecipesByTags(
-            this.activeTags.ingredient,
-            this.activeTags.appliance,
-            this.activeTags.utensil
-        );
-
-        // Refine the filtered recipes by the search term
-        filteredRecipes = searchManager.searchRecipes(searchTerm, filteredRecipes);
-
-        // Render the filtered recipes
-        this.renderRecipes(filteredRecipes);
-
-        // Update dropdown options based on the filtered recipes
-        this.updateFiltersBasedOnRecipes(filteredRecipes);
-    }
-
-    // Render the filtered recipes
-    renderRecipes(recipes, searchTerm = '') {
-        const container = document.getElementById('recipes-container');
-        container.innerHTML = ''; // Clear previous results
-
-        if (!recipes || recipes.length === 0) {
-            const messageContainer = document.getElementById('message-container');
-            const suggestions = "vous pouvez chercher « tarte aux pommes », « poisson », etc.";
-            messageContainer.innerHTML = `Aucune recette ne contient ‘${searchTerm}’. ${suggestions}`;
-            return;
-        }
-
-        recipes.forEach((recipe) => {
-            const recipeCard = new RecipeCard(recipe);
-            container.appendChild(recipeCard.createRecipeCard());
-        });
-    }
-
-    // Update dropdowns (filters) based on filtered recipes
-    updateFiltersBasedOnRecipes(filteredRecipes) {
-        const ingredients = new Set();
-        const appliances = new Set();
-        const utensils = new Set();
-
-        // Loop through filtered recipes to extract ingredients, appliances, and utensils
-        filteredRecipes.forEach((recipe) => {
-            recipe.ingredients.forEach((ingredient) => {
-                if (ingredient.ingredient) {
-                    ingredients.add(ingredient.ingredient);
-                }
-            });
-            appliances.add(recipe.appliance);
-            recipe.ustensils.forEach((utensil) => utensils.add(utensil));
-        });
-
-        // Update the dropdowns with new filter options
-        this.ingredientsDropdown.updateOptions([...ingredients]);
-        this.appliancesDropdown.updateOptions([...appliances]);
-        this.utensilsDropdown.updateOptions([...utensils]);
-    }
-
-    // Method to remove a tag and update filters accordingly
-    removeFilter(type, value) {
-        if (!this.activeTags[type]) {
-            console.error(`Invalid tag type: ${type}`);
-            return;
-        }
-
-        // Remove the tag from the activeTags array for the specified type
-        this.activeTags[type] = this.activeTags[type].filter(tag => tag !== value);
-
-        // Update the filters and recipes after removing the tag
-        this.updateFiltersBasedOnTags();
     }
 }
