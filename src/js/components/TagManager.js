@@ -1,13 +1,12 @@
-class TagManager {
+export default class TagManager {
     constructor(filterManager, containerId) {
         this.filterManager = filterManager;
         this.container = document.getElementById(containerId);
-        this.tags = {};
+        this.tags = {}; // Initialize tags object
     }
 
     // Method to add a tag
     addTag(type, value) {
-        console.log('Adding tag:', value); // Log the tag being added
         if (this.tags[type] && this.tags[type].includes(value)) {
             return; // Prevent duplicate tags
         }
@@ -57,8 +56,12 @@ class TagManager {
             this.tags[type].splice(index, 1);
         }
 
-        // Optionally update your filters (e.g., remove the filter from applied filters)
-        this.filterManager.removeFilter(type, value); // Ensure your FilterManager has a method to remove filters
+        // Call the removeFilter method from FilterManager to update filters
+        if (this.filterManager && typeof this.filterManager.removeFilter === 'function') {
+            this.filterManager.removeFilter(type, value);
+        } else {
+            console.error('filterManager.removeFilter is not defined or is not a function');
+        }
     }
 
     // Optionally, you can clear all tags
@@ -67,5 +70,3 @@ class TagManager {
         this.tags = {};
     }
 }
-
-export default TagManager;

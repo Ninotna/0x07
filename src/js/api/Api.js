@@ -67,4 +67,19 @@ export default class Api {
             recipe.ingredients.some(ing => ing.ingredient.toLowerCase() === ingredient.toLowerCase())
         );
     }
+
+// Fetch all recipes matching the selected tags
+getRecipesByTags(selectedIngredients, selectedAppliances, selectedUtensils) {
+    return this.data.filter(recipe => {
+        const matchesIngredients = selectedIngredients.every(ingredient =>
+            recipe.ingredients.some(i => i.ingredient.toLowerCase() === ingredient.toLowerCase())
+        );
+        const matchesAppliance = !selectedAppliances.length || selectedAppliances.includes(recipe.appliance);
+        const matchesUtensils = selectedUtensils.every(utensil =>
+            recipe.ustensils.includes(utensil)
+        );
+        return matchesIngredients && matchesAppliance && matchesUtensils;
+    });
+}
+
 }
