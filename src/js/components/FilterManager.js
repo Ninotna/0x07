@@ -1,6 +1,6 @@
-import Dropdown from "./Dropdown.js"; // Adjust the path as necessary
-import RecipeCard from "../layout/RecipeCard.js";
-import TagManager from "./TagManager.js";
+import Dropdown from './Dropdown.js'; 
+import TagManager from './TagManager.js';
+import RecipeCard from '../layout/RecipeCard.js';
 
 export default class FilterManager {
   constructor(api) {
@@ -93,9 +93,6 @@ export default class FilterManager {
       });
     }
 
-    // Debug: Log the number of filtered recipes
-    // console.log("Filtered Recipes:", filteredRecipes.length);
-
     // Step 3: Render the filtered recipes
     this.renderRecipes(filteredRecipes);
 
@@ -126,10 +123,10 @@ export default class FilterManager {
       recipe.ustensils.forEach((utensil) => utensils.add(utensil));
     });
 
-    // Update the dropdowns with new filter options
-    this.ingredientsDropdown.updateOptions([...ingredients],this.activeTags);
-    this.appliancesDropdown.updateOptions([...appliances]);
-    this.utensilsDropdown.updateOptions([...utensils]);
+    // Update the dropdowns with new filter options, sorted alphabetically
+    this.ingredientsDropdown.updateOptions([...ingredients].sort((a, b) => a.localeCompare(b)));
+    this.appliancesDropdown.updateOptions([...appliances].sort((a, b) => a.localeCompare(b)));
+    this.utensilsDropdown.updateOptions([...utensils].sort((a, b) => a.localeCompare(b)));
   }
 
   // Render filtered recipes
@@ -138,9 +135,6 @@ export default class FilterManager {
     const recipeCountElement = document.getElementById("recipeCount");
 
     container.innerHTML = ""; // Clear previous results
-
-    // Debug: Log how many recipes are about to be rendered
-    // console.log("Rendering Recipes:", recipes.length);
 
     if (!recipes || recipes.length === 0) {
       container.innerHTML =
@@ -167,48 +161,15 @@ export default class FilterManager {
     const appliances = this.api.getAllAppliances();
     const utensils = this.api.getAllUtensils();
 
-    this.updateDropdown(
-      "ingredientsDropdown",
-      ingredients,
-      "ingredient",
-      this.tagManager
+    // Update the dropdowns with sorted values right at initialization
+    this.ingredientsDropdown.updateOptions(
+      ingredients.sort((a, b) => a.localeCompare(b))
     );
-    this.updateDropdown(
-      "appliancesDropdown",
-      appliances,
-      "appliance",
-      this.tagManager
+    this.appliancesDropdown.updateOptions(
+      appliances.sort((a, b) => a.localeCompare(b))
     );
-    this.updateDropdown(
-      "utensilsDropdown",
-      utensils,
-      "utensil",
-      this.tagManager
+    this.utensilsDropdown.updateOptions(
+      utensils.sort((a, b) => a.localeCompare(b))
     );
-  }
-
-  // Update dropdown with new items
-  updateDropdown(dropdownId, items, type, tagManager) {
-    const dropdown = document.getElementById(dropdownId);
-    if (!dropdown) {
-      console.error(`Dropdown with ID ${dropdownId} not found`);
-      return;
-    }
-
-    const ul = dropdown.querySelector("ul");
-    ul.innerHTML = ""; // Clear the existing dropdown items
-
-    items.forEach((item) => {
-      const li = document.createElement("li");
-      li.classList.add("p-2", "cursor-pointer", "hover:bg-yellow-100");
-      li.textContent = item;
-      ul.appendChild(li);
-
-      // Attach event listener to add the tag on click
-      li.addEventListener("click", () => {
-        tagManager.addTag(type, item); // Add tag to the tagManager
-        this.addTagAndUpdate(type, item); // Add tag and update the recipes and filters
-      });
-    });
   }
 }

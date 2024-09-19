@@ -69,17 +69,23 @@ export default class Api {
     }
 
 // Fetch all recipes matching the selected tags
-getRecipesByTags(selectedIngredients, selectedAppliances, selectedUtensils) {
-    return this.data.filter(recipe => {
-        const matchesIngredients = selectedIngredients.every(ingredient =>
-            recipe.ingredients.some(i => i.ingredient.toLowerCase() === ingredient.toLowerCase())
-        );
-        const matchesAppliance = !selectedAppliances.length || selectedAppliances.includes(recipe.appliance);
-        const matchesUtensils = selectedUtensils.every(utensil =>
-            recipe.ustensils.includes(utensil)
-        );
-        return matchesIngredients && matchesAppliance && matchesUtensils;
+// Exemple de méthode dans la classe Api pour filtrer les recettes par tags
+getRecipesByTags(ingredients, appliances, utensils) {
+    return this.data.filter((recipe) => {
+        // Vérifie que toutes les conditions de filtrage sont remplies (AND logique)
+        const ingredientMatch = ingredients.length === 0 || 
+            ingredients.every((ingredient) => recipe.ingredients.some((ing) => ing.ingredient.toLowerCase() === ingredient.toLowerCase()));
+        
+        const applianceMatch = appliances.length === 0 || 
+            appliances.includes(recipe.appliance.toLowerCase());
+        
+        const utensilMatch = utensils.length === 0 || 
+            utensils.every((utensil) => recipe.ustensils.some((ut) => ut.toLowerCase() === utensil.toLowerCase()));
+
+        // Renvoie vrai uniquement si toutes les conditions sont remplies
+        return ingredientMatch && applianceMatch && utensilMatch;
     });
 }
+
 
 }
