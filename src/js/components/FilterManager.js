@@ -94,7 +94,7 @@ export default class FilterManager {
     }
 
     // Debug: Log the number of filtered recipes
-    console.log("Filtered Recipes:", filteredRecipes.length);
+    // console.log("Filtered Recipes:", filteredRecipes.length);
 
     // Step 3: Render the filtered recipes
     this.renderRecipes(filteredRecipes);
@@ -127,7 +127,7 @@ export default class FilterManager {
     });
 
     // Update the dropdowns with new filter options
-    this.ingredientsDropdown.updateOptions([...ingredients]);
+    this.ingredientsDropdown.updateOptions([...ingredients],this.activeTags);
     this.appliancesDropdown.updateOptions([...appliances]);
     this.utensilsDropdown.updateOptions([...utensils]);
   }
