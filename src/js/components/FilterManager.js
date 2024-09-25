@@ -46,7 +46,7 @@ export default class FilterManager {
   addTagAndUpdate(type, value) {
     if (!this.activeTags[type].includes(value)) {
       this.activeTags[type].push(value); // Add tag if not already present
-      console.log(`Tag added to activeTags[${type}]:`, this.activeTags[type]);  // Log after tag is added
+      // console.log(`Tag added to activeTags[${type}]:`, this.activeTags[type]);  // Log after tag is added
     }
     this.tagManager.addTag(type, value); // Add the tag to the TagManager UI
     this.updateFiltersAndRenderRecipes(); // Update filters and render recipes
@@ -72,15 +72,13 @@ export default class FilterManager {
   updateFiltersAndRenderRecipes() {
     const { ingredient, appliance, utensil } = this.activeTags;
 
-    console.log("Passing activeTags to dropdowns:", this.activeTags);
+    // console.log("Passing activeTags to dropdowns:", this.activeTags);
     // Step 1: Filter recipes based on the selected tags
     let filteredRecipes = this.api.getRecipesByTags(
       ingredient,
       appliance,
       utensil
     );
-
-    console.log('tag selectionne: '+utensil)
 
     // Step 2: Apply the search term filter ONLY to the recipes already filtered by tags
     if (this.searchTerm) {

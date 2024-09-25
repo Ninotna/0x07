@@ -87,6 +87,15 @@ updateOptions(items, tags) {
       // console.log(`After filtering ${currentTagKey}:`, items);  // Log items after filtering
   }
 
+  if (tags && Array.isArray(tags["appliance"]) && this.dropdownId === "appliancesDropdown") {
+    // console.log("Before filtering appliances:", items);  // Log items before filtering
+    items = items.filter((item) => 
+        !tags["appliance"].some((appliance) => appliance.toLowerCase() === item.toLowerCase())
+    );
+    // console.log("After filtering appliances:", items);  // Log items after filtering
+}
+
+
   // Use a Set to ensure no duplicates (case-insensitive)
   const uniqueItems = new Map();
   items.forEach((item) => {
