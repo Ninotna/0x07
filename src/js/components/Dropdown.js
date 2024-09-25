@@ -47,17 +47,18 @@ class Dropdown {
   }
 
   // Toggle the visibility of the arrows
-  toggleArrows() {
-    if (this.dropdown.classList.contains("hidden")) {
+toggleArrows() {
+  if (this.dropdown.classList.contains("hidden")) {
       // Dropdown is closed, show the down arrow
       this.arrowDown.classList.remove("hidden");
       this.arrowUp.classList.add("hidden");
-    } else {
+  } else {
       // Dropdown is open, show the up arrow
       this.arrowDown.classList.add("hidden");
       this.arrowUp.classList.remove("hidden");
-    }
   }
+}
+
 
 // Dynamically update the dropdown with new items
 updateOptions(items, tags) {
@@ -117,16 +118,16 @@ updateOptions(items, tags) {
   updateDropdownItems() {
     const listItems = this.dropdown.querySelectorAll("li");
     listItems.forEach((item) => {
-      item.addEventListener("click", () => {
-        const selectedValue = item.textContent;
-        console.log("Tag selected from dropdown:", selectedValue);  // Log the selected tag
-        this.filterCallback(selectedValue);
-        this.button.textContent = this.button.dataset.defaultText; // Reset button text to the default title
-        this.dropdown.classList.add("hidden"); // Hide the dropdown after selection
-        this.toggleArrows(); // Ensure the arrow is pointing down after selection
-      });
+        item.addEventListener("click", () => {
+            const selectedValue = item.textContent;  // Get the selected tag
+            this.filterCallback(selectedValue);  // Handle the tag selection
+
+            // Close the dropdown and toggle the arrows
+            this.dropdown.classList.add("hidden"); // Hide the dropdown after selection
+            this.toggleArrows(); // Ensure the arrow is updated after selection
+        });
     });
-  }
+}
 
   // Filter dropdown items based on search term
   filterDropdownItems(searchTerm) {
