@@ -46,6 +46,7 @@ export default class FilterManager {
   addTagAndUpdate(type, value) {
     if (!this.activeTags[type].includes(value)) {
       this.activeTags[type].push(value); // Add tag if not already present
+      console.log(`Tag added to activeTags[${type}]:`, this.activeTags[type]);  // Log after tag is added
     }
     this.tagManager.addTag(type, value); // Add the tag to the TagManager UI
     this.updateFiltersAndRenderRecipes(); // Update filters and render recipes
@@ -71,12 +72,15 @@ export default class FilterManager {
   updateFiltersAndRenderRecipes() {
     const { ingredient, appliance, utensil } = this.activeTags;
 
+    console.log("Passing activeTags to dropdowns:", this.activeTags);
     // Step 1: Filter recipes based on the selected tags
     let filteredRecipes = this.api.getRecipesByTags(
       ingredient,
       appliance,
       utensil
     );
+
+    console.log('tag selectionne: '+utensil)
 
     // Step 2: Apply the search term filter ONLY to the recipes already filtered by tags
     if (this.searchTerm) {
@@ -93,6 +97,7 @@ export default class FilterManager {
       });
     }
 
+      // console.log(filteredRecipes);
     // Step 3: Render the filtered recipes
     this.renderRecipes(filteredRecipes);
 
@@ -123,10 +128,12 @@ export default class FilterManager {
       recipe.ustensils.forEach((utensil) => utensils.add(utensil));
     });
 
+
+
     // Update the dropdowns with new filter options, sorted alphabetically
-    this.ingredientsDropdown.updateOptions([...ingredients].sort((a, b) => a.localeCompare(b)));
-    this.appliancesDropdown.updateOptions([...appliances].sort((a, b) => a.localeCompare(b)));
-    this.utensilsDropdown.updateOptions([...utensils].sort((a, b) => a.localeCompare(b)));
+    this.ingredientsDropdown.updateOptions([...ingredients].sort((a, b) => a.localeCompare(b)),this.activeTags);
+    this.appliancesDropdown.updateOptions([...appliances].sort((a, b) => a.localeCompare(b)),this.activeTags);
+    this.utensilsDropdown.updateOptions([...utensils].sort((a, b) => a.localeCompare(b)),this.activeTags);
   }
 
   // Render filtered recipes
@@ -163,13 +170,13 @@ export default class FilterManager {
 
     // Update the dropdowns with sorted values right at initialization
     this.ingredientsDropdown.updateOptions(
-      ingredients.sort((a, b) => a.localeCompare(b))
+      ingredients.sort((a, b) => a.localeCompare(b),),this.activeTags
     );
     this.appliancesDropdown.updateOptions(
-      appliances.sort((a, b) => a.localeCompare(b))
+      appliances.sort((a, b) => a.localeCompare(b)),this.activeTags
     );
     this.utensilsDropdown.updateOptions(
-      utensils.sort((a, b) => a.localeCompare(b))
+      utensils.sort((a, b) => a.localeCompare(b)),this.activeTags
     );
   }
 }

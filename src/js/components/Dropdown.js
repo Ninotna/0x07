@@ -2,6 +2,7 @@ class Dropdown {
   constructor(buttonId, dropdownId, filterCallback) {
     this.button = document.getElementById(buttonId);
     this.dropdown = document.getElementById(dropdownId);
+    this.dropdownId = dropdownId;  // Store dropdownId as a class property
     this.filterCallback = filterCallback;
     this.arrowDown = this.button.querySelector("#arrow-down"); // Flèche vers le bas
     this.arrowUp = this.button.querySelector("#arrow-up"); // Flèche vers le haut
@@ -58,51 +59,59 @@ class Dropdown {
     }
   }
 
-  // Dynamically update the dropdown with new items
-  updateOptions(items, tags) {
-    const ul = this.dropdown.querySelector("ul");
-    ul.innerHTML = ""; // Clear the current list
+// Dynamically update the dropdown with new items
+updateOptions(items, tags) {
+  const ul = this.dropdown.querySelector("ul");
+  ul.innerHTML = ""; // Clear the current list
 
-    // Si des tags sont déjà sélectionnés, les filtrer de la liste des options
-    if (tags && tags["ingredient"] && this.dropdownId === "ingredientsDropdown") {
-      items = items.filter((item) => !tags["ingredient"].includes(item));
-    } else if (tags && tags["appliance"] && this.dropdownId === "appliancesDropdown") {
-      items = items.filter((item) => !tags["appliance"].includes(item));
-    } else if (tags && tags["utensil"] && this.dropdownId === "utensilsDropdown") {
-      items = items.filter((item) => !tags["utensil"].includes(item));
-    }
+  // Map dropdownId to the correct key in the tags object
+  const dropdownTypeMap = {
+      ingredientsDropdown: "ingredient",
+      appliancesDropdown: "appliance",
+      utensilsDropdown: "utensil"
+  };
 
-    // Utiliser un Set pour garantir qu'il n'y a pas de doublons (insensibles à la casse)
-    const uniqueItems = new Map();
+  // Get the correct key for the current dropdown
+  const currentTagKey = dropdownTypeMap[this.dropdownId];
 
-    items.forEach((item) => {
-      const lowerCaseItem = item.toLowerCase(); // Convert to lowercase to check uniqueness
-      const capitalizedItem = item.charAt(0).toUpperCase() + item.slice(1).toLowerCase(); // Capitalize for display
+  // Only proceed if we have a valid tag key
+  if (tags && currentTagKey && Array.isArray(tags[currentTagKey])) {
+      // console.log(`Before filtering ${currentTagKey}:`, items);  // Log items before filtering
+
+      // Filter the items based on the selected tags (case-insensitive)
+      items = items.filter((item) =>
+          !tags[currentTagKey].some((selectedTag) => selectedTag.toLowerCase() === item.toLowerCase())
+      );
+
+      // console.log(`After filtering ${currentTagKey}:`, items);  // Log items after filtering
+  }
+
+  // Use a Set to ensure no duplicates (case-insensitive)
+  const uniqueItems = new Map();
+  items.forEach((item) => {
+      const lowerCaseItem = item.toLowerCase();  // Convert to lowercase to check uniqueness
+      const capitalizedItem = item.charAt(0).toUpperCase() + item.slice(1).toLowerCase();  // Capitalize for display
 
       if (!uniqueItems.has(lowerCaseItem)) {
-        uniqueItems.set(lowerCaseItem, capitalizedItem); // Store the capitalized version
+          uniqueItems.set(lowerCaseItem, capitalizedItem);  // Store the capitalized version
       }
-    });
+  });
 
-    // Convertir les valeurs de la Map en tableau et trier les éléments par ordre alphabétique
-    const sortedItems = Array.from(uniqueItems.values()).sort((a, b) => a.localeCompare(b));
+  // Convert the values of the Map into an array and sort alphabetically
+  const sortedItems = Array.from(uniqueItems.values()).sort((a, b) => a.localeCompare(b));
 
-    // Ajouter les éléments triés au dropdown
-    sortedItems.forEach((originalItem) => {
+  // Add the sorted items to the dropdown
+  sortedItems.forEach((originalItem) => {
       const li = document.createElement("li");
       li.textContent = originalItem;
-      li.classList.add(
-        "px-4",
-        "py-2",
-        "text-gray-700",
-        "hover:bg-gray-100",
-        "cursor-pointer"
-      );
+      li.classList.add("px-4", "py-2", "text-gray-700", "hover:bg-gray-100", "cursor-pointer");
       ul.appendChild(li);
-    });
+  });
 
-    this.updateDropdownItems();
-  }
+  this.updateDropdownItems();  // Reattach event listeners to the new dropdown items
+}
+
+
 
   // Update the dropdown items and attach click events
   updateDropdownItems() {
@@ -110,6 +119,7 @@ class Dropdown {
     listItems.forEach((item) => {
       item.addEventListener("click", () => {
         const selectedValue = item.textContent;
+        console.log("Tag selected from dropdown:", selectedValue);  // Log the selected tag
         this.filterCallback(selectedValue);
         this.button.textContent = this.button.dataset.defaultText; // Reset button text to the default title
         this.dropdown.classList.add("hidden"); // Hide the dropdown after selection

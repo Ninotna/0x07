@@ -1,38 +1,37 @@
-import { recipes } from "./data/recipes.js"; // Importer les données depuis recipes.js
-import Api from "./api/Api.js"; // Importer l'API de gestion des données
-import FilterManager from "./components/FilterManager.js"; // Importer le gestionnaire de filtres
-import Dropdown from "./components/Dropdown.js"; // Importer la gestion des dropdowns
-import RecipeDisplayManager from "./utils/RecipeDisplayManager.js"; // Pour l'affichage des recettes
-import RecipeSearchManager from "./components/RecipeSearchManager.js"; // Pour la recherche principale
-import RecipeCard from "./layout/RecipeCard.js"; // Adjust path based on file location
-// import TagManager from './components/TagManager.js'; // Import the TagManager class
+import { recipes } from "./data/recipes.js"; // Import recipe data from an external file
+import Api from "./api/Api.js"; // Import the API for managing recipes data
+import FilterManager from "./components/FilterManager.js"; // Import the filter manager for handling search filters
+import Dropdown from "./components/Dropdown.js"; // Import dropdown management logic
+import RecipeDisplayManager from "./utils/RecipeDisplayManager.js"; // Utility for displaying the recipes
+import RecipeSearchManager from "./components/RecipeSearchManager.js"; // Handles the main search functionality
+import RecipeCard from "./layout/RecipeCard.js"; // Handles individual recipe card layout
 
-// Instanciation de l'API avec les données importées
+// Initialize the API with the imported recipe data
 const api = new Api(recipes);
 
-// Instanciation du gestionnaire de filtres
+// Initialize the filter manager to manage filters
 const filterManager = new FilterManager(api);
 
-// Instancier la classe TagManager
+// Instanciation of TagManager is commented out but could be used for tag-based filtering
 // const tagManager = new TagManager(filterManager, 'tags-container');
 
-// Fonction de rendu des cartes de recettes
+// Function to render recipe cards
 function renderRecipes(recipes, searchTerm = "") {
   const container = document.getElementById("recipes-container");
-  container.innerHTML = ""; // Effacer les résultats précédents
+  container.innerHTML = ""; // Clear previous results
 
-  // Vérifier si recipes est défini et est un tableau
+  // Check if recipes are valid and if it's an array
   if (!recipes || !Array.isArray(recipes)) {
     console.error(
       "Aucune donnée de recette trouvée ou 'recipes' n'est pas un tableau."
     );
     const messageContainer = document.getElementById("message-container");
     messageContainer.innerHTML =
-      "Une erreur s'est produite lors du chargement des recettes.";
+      "Une erreur s'est produite lors du chargement des recettes."; // Show error message if recipes are invalid
     return;
   }
 
-  // Scénario alternatif A1 : Si aucune recette n'a été trouvée
+  // Scenario A1: If no recipes are found, display a message with suggestions
   if (recipes.length === 0) {
     const messageContainer = document.getElementById("message-container");
     const suggestions =
@@ -41,141 +40,98 @@ function renderRecipes(recipes, searchTerm = "") {
     return;
   }
 
-  // Vider le message d'erreur si des recettes sont trouvées
+  // Clear any error messages if recipes are found
   const messageContainer = document.getElementById("message-container");
   messageContainer.innerHTML = "";
 
-  // Sinon, on affiche les recettes
+  // Render each recipe in the array
   recipes.forEach((recipe) => {
-    // Crée une nouvelle instance de RecipeCard
+    // Create a new instance of RecipeCard for each recipe
     const recipeCard = new RecipeCard(recipe);
 
-    // Ajouter une animation (facultatif)
+    // Add animation classes for visual effect
     const recipeElement = recipeCard.createRecipeCard();
-    recipeElement.classList.add("transition", "opacity-0"); // Commencer avec une transparence
+    recipeElement.classList.add("transition", "opacity-0"); // Start with transparency
 
-    container.appendChild(recipeElement);
+    container.appendChild(recipeElement); // Append the recipe card to the container
 
-    // Déclencher une animation (ex: fondre la recette progressivement)
+    // Trigger animation to make the card appear with fade-in effect
     setTimeout(() => {
       recipeElement.classList.remove("opacity-0");
       recipeElement.classList.add("opacity-100");
-    }, 100); // Légère pause pour voir l'effet de transition
+    }, 100); // Slight delay for transition effect
   });
 }
 
-// Fonction de filtre pour les recettes selon un terme de recherche (Main Search-bar)
+// Function to filter recipes based on search term from the main search bar
 function filterRecipes(searchTerm) {
   const filteredRecipes = searchManager.searchRecipes(searchTerm);
 
-  // Mise à jour des recettes affichées
+  // Update the displayed recipes
   renderRecipes(filteredRecipes, searchTerm);
 
-  // Mise à jour des filtres basés sur les recettes filtrées
+  // Update filters based on the filtered recipes
   filterManager.updateFiltersBasedOnRecipes(filteredRecipes);
 }
 
-// Initialisation des dropdowns pour chaque filtre (Filter Search-bar)
+// Initialize dropdowns for each filter (e.g., ingredients, appliances, utensils)
+
+// Sample Dropdown for ingredients (currently commented out):
 // const ingredientsDropdown = new Dropdown(
 //     'ingredientsFilter',
 //     'ingredientsDropdown',
 //     (selectedIngredient) => {
 //         const filteredRecipes = api.getRecipesByIngredient(selectedIngredient);
-//         renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
+//         renderRecipes(filteredRecipes); // Update displayed recipes
 
 //         // Add the selected ingredient as a tag
 //         tagManager.addTag('ingredient', selectedIngredient);
 //     }
 // );
 
-// console.log(ingredientsDropdown); // Should show a Dropdown instance
-// console.log(typeof ingredientsDropdown.updateOptions); // Should log 'function'
-
-// console.log(ingredientsDropdown); // Check if Dropdown instance is created correctly
-// console.log(typeof ingredientsDropdown.updateOptions); // Should log 'function'
-// console.log(Object.keys(ingredientsDropdown)); // Should include 'updateOptions'
-
-// const appliancesDropdown = new Dropdown(
-//     'appliancesFilter',
-//     'appliancesDropdown',
-//     (selectedAppliance) => {
-//         const filteredRecipes = api.getRecipesByAppliance(selectedAppliance);
-//         renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
-
-//         // Ajout du tag pour l'appareil sélectionné
-//         tagManager.addTag('appliance', selectedAppliance);
-//     }
-// );
-
-// const utensilsDropdown = new Dropdown(
-//     'utensilsFilter',
-//     'utensilsDropdown',
-//     (selectedUtensil) => {
-//         const filteredRecipes = api.getRecipesByUtensil(selectedUtensil);
-//         renderRecipes(filteredRecipes); // Mise à jour des recettes affichées
-
-//         // Ajout du tag pour l'ustensile sélectionné
-//         tagManager.addTag('utensil', selectedUtensil);
-//     }
-// );
-
-// Initialisation des filtres
+// Initializing filters to prepare the dropdowns and filters
 filterManager.initFilters();
 
-// Chargement initial des recettes
+// Initial rendering of all recipes
 renderRecipes(recipes);
 
-// Instancier le RecipeDisplayManager
+// Instantiate RecipeDisplayManager for handling display logic
 const displayManager = new RecipeDisplayManager(
-  "recipes-container",
-  "recipeCount"
+  "recipes-container", // ID of the container for recipe cards
+  "recipeCount" // ID for displaying the number of recipes
 );
 
-// Instancier la classe RecipeSearchManager pour la recherche principale
+// Instantiate RecipeSearchManager for handling search logic
 const searchManager = new RecipeSearchManager(
-  recipes,
-  "recipes-container",
-  "message-container"
+  recipes, // List of recipes
+  "recipes-container", // Container ID for displaying recipes
+  "message-container" // ID for displaying error or info messages
 );
 
-// Gestion de la recherche dans la barre de recherche principale (Main Search-bar)
+// Event listener for handling input in the main search bar
 document.getElementById("search-bar").addEventListener("input", (e) => {
   const searchTerm = e.target.value;
 
-  // Filtrer les recettes en fonction du terme de recherche
+  // Filter recipes based on the search term
   filterRecipes(searchTerm);
 
-  // Call the function to update search results based on the search term
-  filterManager.updateSearchTerm(searchTerm); // Re-filter recipes by search term and selected tags
+  // Update search results and filters based on the search term
+  filterManager.updateSearchTerm(searchTerm);
 });
 
-// Gestion de la recherche dans les dropdowns (Filter Search-bar)
+// Event listener for handling input in the filter dropdowns
 document.querySelectorAll(".dropdown-search").forEach((dropdownSearchBar) => {
   dropdownSearchBar.addEventListener("input", (e) => {
     const searchTerm = e.target.value;
     const dropdownId = dropdownSearchBar.getAttribute("data-dropdown-id");
 
-    // Mettre à jour les éléments du dropdown en fonction de la recherche
+    // Update dropdown options based on the search input
     filterManager.filterDropdown(dropdownId, searchTerm);
   });
 });
 
-// Afficher les recettes initiales
+// Display initial set of recipes on page load
 displayManager.renderRecipes(recipes);
 
-// const ingredientsDropdown2 = new Dropdown(
-//     'ingredientsFilter',      // Button ID
-//     'ingredientsDropdown',    // Dropdown container ID
-//     (selectedIngredient) => { // Callback
-//       console.log(`Selected ingredient: ${selectedIngredient}`);
-//     }
-//   );
-
-//   console.log(ingredientsDropdown2); // Should show a Dropdown instance
-//   console.log(typeof ingredientsDropdown2.updateOptions); // Should log 'function'
-
-// ingredientsDropdown.updateOptions(['Tomato1', 'Onion1', 'Garlic1']);
-// ingredientsDropdown.updateOptions(['Carrot', 'Potato', 'Lettuce']);
-
-// Call updateDropdown for the ingredients filter and pass tagManager
+// Example of updating dropdown options and tags (commented out):
 // filterManager.updateDropdown('ingredientsDropdown', ['Lait', 'Crème de coco'], 'ingredient', tagManager);
