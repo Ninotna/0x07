@@ -1,13 +1,15 @@
+// api/Api.js
+
 export default class Api {
   constructor(data) {
-    // Vérification que les données sont correctement passées
+    // Ensure the passed data is an array of recipes
     if (!Array.isArray(data)) {
-      throw new Error("Les données des recettes doivent être un tableau.");
+      throw new Error("Recipe data must be an array.");
     }
     this.data = data;
   }
 
-  // Récupérer tous les ingrédients uniques
+  // Retrieve all unique ingredients from the recipes
   getAllIngredients() {
     if (!this.data || !Array.isArray(this.data)) {
       return [];
@@ -29,7 +31,7 @@ export default class Api {
     return Array.from(ingredientsMap.values());
   }
 
-  // Récupérer tous les appareils uniques
+  // Retrieve all unique appliances from the recipes
   getAllAppliances() {
     if (!this.data || !Array.isArray(this.data)) {
       return [];
@@ -39,10 +41,12 @@ export default class Api {
     this.data.forEach((recipe) => {
       appliancesSet.add(recipe.appliance);
     });
-    return Array.from(appliancesSet); // Retourne un tableau d'appareils uniques
+
+    // Return an array of unique appliances
+    return Array.from(appliancesSet);
   }
 
-  // Récupérer tous les ustensiles uniques
+  // Retrieve all unique utensils from the recipes
   getAllUtensils() {
     if (!this.data || !Array.isArray(this.data)) {
       return [];
@@ -54,10 +58,12 @@ export default class Api {
         utensilsSet.add(utensil);
       });
     });
-    return Array.from(utensilsSet); // Retourne un tableau d'ustensiles uniques
+
+    // Return an array of unique utensils
+    return Array.from(utensilsSet);
   }
 
-  // Filtrer les recettes par ingrédient
+  // Filter recipes by a specific ingredient
   getRecipesByIngredient(ingredient) {
     if (!this.data || !Array.isArray(this.data)) {
       return [];
@@ -70,11 +76,10 @@ export default class Api {
     );
   }
 
-  // Fetch all recipes matching the selected tags
-  // Exemple de méthode dans la classe Api pour filtrer les recettes par tags
+  // Filter recipes by multiple tags (ingredients, appliances, utensils)
   getRecipesByTags(ingredients, appliances, utensils) {
     return this.data.filter((recipe) => {
-      // Vérifie que toutes les conditions de filtrage sont remplies (AND logique)
+      // Match ingredients (AND logic)
       const ingredientMatch =
         ingredients.length === 0 ||
         ingredients.every((ingredient) =>
@@ -83,12 +88,14 @@ export default class Api {
           )
         );
 
+      // Match appliances (AND logic)
       const applianceMatch =
         appliances.length === 0 ||
         appliances
           .map((appliance) => appliance.toLowerCase())
           .includes(recipe.appliance.toLowerCase());
 
+      // Match utensils (AND logic)
       const utensilMatch =
         utensils.length === 0 ||
         utensils.every((utensil) =>
@@ -97,8 +104,9 @@ export default class Api {
           )
         );
 
-      // Renvoie vrai uniquement si toutes les conditions sont remplies
+      // Return true only if all conditions are met
       return ingredientMatch && applianceMatch && utensilMatch;
     });
   }
 }
+

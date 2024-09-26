@@ -1,54 +1,56 @@
+// /components/RecipeSearchManager.js
+
 class RecipeSearchManager {
   constructor(recipes, resultContainerId, messageContainerId) {
-    this.recipes = recipes; // Stocker les recettes
-    this.resultContainer = document.getElementById(resultContainerId); // Conteneur des résultats
-    this.messageContainer = document.getElementById(messageContainerId); // Conteneur pour les messages d'absence de résultats
+    this.recipes = recipes; // Store the list of recipes
+    this.resultContainer = document.getElementById(resultContainerId); // Container for displaying results
+    this.messageContainer = document.getElementById(messageContainerId); // Container for no results message
   }
 
   /**
-   * Recherche des recettes correspondant au terme donné
-   * @param {string} searchTerm - Le terme de recherche entré par l'utilisateur
-   * @returns {Array} - Les recettes filtrées ou un tableau vide
+   * Search for recipes that match the given search term
+   * @param {string} searchTerm - The search term entered by the user
+   * @returns {Array} - An array of filtered recipes or an empty array if none found
    */
   searchRecipes(searchTerm) {
-    const minChars = 3; // Nombre minimal de caractères à entrer
+    const minChars = 3; // Minimum number of characters required for search
 
-    // Vérifier que le terme de recherche contient au moins 3 caractères
+    // Return an empty array if the search term is too short
     if (searchTerm.length < minChars) {
-      return []; // Retourner un tableau vide si le terme est trop court
+      return [];
     }
 
-    const foundRecipes = []; // Tableau pour stocker les recettes trouvées
+    const foundRecipes = []; // Array to store found recipes
 
-    // Boucle à travers toutes les recettes disponibles
+    // Loop through all recipes to find matches
     for (let i = 0; i < this.recipes.length; i++) {
-      const recipe = this.recipes[i]; // Accéder à chaque recette
+      const recipe = this.recipes[i];
 
-      // Convertir les valeurs en minuscules pour une recherche insensible à la casse
+      // Convert values to lowercase for case-insensitive search
       const recipeName = recipe.name.toLowerCase();
       const recipeDescription = recipe.description.toLowerCase();
 
-      let ingredientMatch = false; // Indicateur si un ingrédient correspond
-      let ingredientList = recipe.ingredients;
+      let ingredientMatch = false; // Indicator for matching ingredients
+      const ingredientList = recipe.ingredients;
 
-      // Boucler à travers tous les ingrédients de la recette
+      // Loop through the ingredients of the recipe
       for (let j = 0; j < ingredientList.length; j++) {
-        let ingredient = ingredientList[j].ingredient.toLowerCase();
+        const ingredient = ingredientList[j].ingredient.toLowerCase();
 
-        // Vérifier si l'ingrédient correspond au terme de recherche
-        if (ingredient.indexOf(searchTerm.toLowerCase()) !== -1) {
-          ingredientMatch = true; // Marquer un ingrédient trouvé
-          break; // Sortir de la boucle une fois trouvé
+        // Check if the ingredient matches the search term
+        if (ingredient.includes(searchTerm.toLowerCase())) {
+          ingredientMatch = true; // Mark ingredient as found
+          break; // Exit loop once match is found
         }
       }
 
-      // Vérifier si le terme de recherche est dans le titre de la recette, la description ou un ingrédient
+      // Check if the search term is in the recipe name, description, or ingredients
       if (
-        recipeName.indexOf(searchTerm.toLowerCase()) !== -1 ||
-        recipeDescription.indexOf(searchTerm.toLowerCase()) !== -1 ||
+        recipeName.includes(searchTerm.toLowerCase()) ||
+        recipeDescription.includes(searchTerm.toLowerCase()) ||
         ingredientMatch
       ) {
-        foundRecipes.push(recipe); // Ajouter la recette trouvée
+        foundRecipes.push(recipe); // Add the found recipe to the array
       }
     }
 
@@ -56,33 +58,34 @@ class RecipeSearchManager {
   }
 
   /**
-   * Affiche un message si aucune recette n'est trouvée
-   * @param {string} searchTerm - Le terme de recherche entré par l'utilisateur
+   * Displays a message if no recipes are found
+   * @param {string} searchTerm - The search term entered by the user
    */
   displayNoResultsMessage(searchTerm) {
-    this.messageContainer.innerHTML = ""; // Vider les messages précédents
+    this.messageContainer.innerHTML = ""; // Clear previous messages
 
     const message = document.createElement("p");
     message.textContent = `Aucune recette ne contient '${searchTerm}'. Vous pouvez chercher « tarte aux pommes », « poisson », etc.`;
 
-    // Ajouter le message au conteneur
+    // Append the no-results message to the message container
     this.messageContainer.appendChild(message);
-    this.resultContainer.innerHTML = ""; // Vider les résultats de recettes précédentes
+    this.resultContainer.innerHTML = ""; // Clear previous search results
   }
 
   /**
-   * Affiche les recettes trouvées
-   * @param {Array} filteredRecipes - Les recettes à afficher
+   * Displays the found recipes in the result container
+   * @param {Array} filteredRecipes - The filtered recipes to display
+   * @param {string} searchTerm - The search term used for filtering (used for displaying no results message)
    */
   displayRecipes(filteredRecipes, searchTerm) {
-    this.resultContainer.innerHTML = ""; // Vider les résultats précédents
+    this.resultContainer.innerHTML = ""; // Clear previous results
 
     if (!filteredRecipes || filteredRecipes.length === 0) {
-      this.displayNoResultsMessage(searchTerm); // Appeler la fonction d'absence de résultats
+      this.displayNoResultsMessage(searchTerm); // Show no results message if no recipes found
       return;
     }
 
-    // Boucle à travers les recettes filtrées et affiche chaque carte de recette
+    // Loop through each filtered recipe and display its card
     filteredRecipes.forEach((recipe) => {
       const recipeCard = new RecipeCard(recipe);
       this.resultContainer.appendChild(recipeCard.createRecipeCard());
@@ -91,3 +94,4 @@ class RecipeSearchManager {
 }
 
 export default RecipeSearchManager;
+

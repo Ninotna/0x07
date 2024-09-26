@@ -1,11 +1,14 @@
+// utils/RecipeDisplayManager.js
+
 import RecipeCard from '../layout/RecipeCard.js';
 
 class RecipeDisplayManager {
     constructor(recipesContainerId, recipeCountId) {
-        // Ensure the container and count elements exist before assigning
+        // Get the recipe container and recipe count elements by their IDs
         this.recipesContainer = document.getElementById(recipesContainerId);
         this.recipeCountElement = document.getElementById(recipeCountId);
 
+        // Log errors if the elements are not found
         if (!this.recipesContainer) {
             console.error(`Element with ID ${recipesContainerId} not found.`);
         }
@@ -15,8 +18,8 @@ class RecipeDisplayManager {
     }
 
     /**
-     * Met à jour le compteur de recettes affichées.
-     * @param {number} count - Le nombre de recettes à afficher.
+     * Updates the displayed recipe count in the UI.
+     * @param {number} count - The number of recipes to display.
      */
     updateRecipeCount(count) {
         if (this.recipeCountElement) {
@@ -25,8 +28,8 @@ class RecipeDisplayManager {
     }
 
     /**
-     * Rend les cartes de recettes dans le conteneur.
-     * @param {Array} recipes - Le tableau des recettes à afficher.
+     * Renders recipe cards in the specified container.
+     * @param {Array} recipes - An array of recipe objects to display.
      */
     renderRecipes(recipes) {
         if (!this.recipesContainer) {
@@ -34,25 +37,26 @@ class RecipeDisplayManager {
             return;
         }
 
-        // Clear the container before rendering
+        // Clear any previously displayed content
         this.recipesContainer.innerHTML = ''; 
 
-        // If no recipes found, display a message and set count to 0
+        // If no recipes are available, display a message and set recipe count to 0
         if (!recipes || !Array.isArray(recipes) || recipes.length === 0) {
             this.recipesContainer.innerHTML = '<p class="text-center text-gray-500">Aucune recette trouvée.</p>';
-            this.updateRecipeCount(0); // Set recipe count to 0
+            this.updateRecipeCount(0);
             return;
         }
 
-        // Render each recipe card
+        // Loop through each recipe and create a card
         recipes.forEach((recipe) => {
             const recipeCard = new RecipeCard(recipe);
             this.recipesContainer.appendChild(recipeCard.createRecipeCard());
         });
 
-        // Update recipe count after rendering
+        // Update the recipe count after rendering
         this.updateRecipeCount(recipes.length);
     }
 }
 
 export default RecipeDisplayManager;
+

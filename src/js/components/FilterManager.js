@@ -1,20 +1,23 @@
-import Dropdown from './Dropdown.js'; 
+import Dropdown from './Dropdown.js';
 import TagManager from './TagManager.js';
 import RecipeCard from '../layout/RecipeCard.js';
 
 export default class FilterManager {
   constructor(api) {
     this.api = api;
-    this.tagManager = new TagManager(this, "tags-container"); // Initialize TagManager
 
-    // Initialize activeTags with arrays for each type (ingredient, appliance, utensil)
+    // Initialize TagManager to manage selected tags in the UI
+    this.tagManager = new TagManager(this, "tags-container");
+
+    // Active tags for filtering, categorized by ingredient, appliance, and utensil
     this.activeTags = {
       ingredient: [],
       appliance: [],
       utensil: [],
     };
 
-    this.searchTerm = ""; // Initialize search term
+    // Search term from the search bar
+    this.searchTerm = "";
 
     // Initialize dropdowns for ingredients, appliances, and utensils
     this.ingredientsDropdown = new Dropdown(
@@ -42,52 +45,42 @@ export default class FilterManager {
     );
   }
 
-  // Add the selected tag, update activeTags, and render recipes
+  // Add the selected tag, update activeTags, and refresh recipe display
   addTagAndUpdate(type, value) {
     if (!this.activeTags[type].includes(value)) {
-      this.activeTags[type].push(value); // Add tag if not already present
-      // console.log(`Tag added to activeTags[${type}]:`, this.activeTags[type]);  // Log after tag is added
+      this.activeTags[type].push(value); // Add tag if it's not already selected
     }
-    this.tagManager.addTag(type, value); // Add the tag to the TagManager UI
-    this.updateFiltersAndRenderRecipes(); // Update filters and render recipes
+    this.tagManager.addTag(type, value); // Display the tag in the UI
+    this.updateFiltersAndRenderRecipes(); // Update recipe and filter display
   }
 
-  // Remove the tag, update activeTags and render recipes
+  // Remove a tag from activeTags and update the recipe display
   removeFilter(type, value) {
     if (!this.activeTags[type]) {
       console.error(`Invalid tag type: ${type}`);
       return;
     }
 
-    // Remove the tag from the activeTags array for the specified type
-    this.activeTags[type] = this.activeTags[type].filter(
-      (tag) => tag !== value
-    );
+    // Remove the tag from the corresponding activeTags array
+    this.activeTags[type] = this.activeTags[type].filter((tag) => tag !== value);
 
-    // Update the filters and recipes after removing the tag
+    // Update the recipe and filter display after removing the tag
     this.updateFiltersAndRenderRecipes();
   }
 
-  // **AND Condition**: Filter recipes based on both tags and search term and update dropdowns
+  // Update recipe and filter display based on both active tags and search term
   updateFiltersAndRenderRecipes() {
     const { ingredient, appliance, utensil } = this.activeTags;
 
-    // console.log("Passing activeTags to dropdowns:", this.activeTags);
-    // Step 1: Filter recipes based on the selected tags
-    let filteredRecipes = this.api.getRecipesByTags(
-      ingredient,
-      appliance,
-      utensil
-    );
+    // Step 1: Filter recipes based on selected tags
+    let filteredRecipes = this.api.getRecipesByTags(ingredient, appliance, utensil);
 
-    // Step 2: Apply the search term filter ONLY to the recipes already filtered by tags
+    // Step 2: Apply the search term filter (on the already filtered recipes)
     if (this.searchTerm) {
       filteredRecipes = filteredRecipes.filter((recipe) => {
         return (
           recipe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-          recipe.description
-            .toLowerCase()
-            .includes(this.searchTerm.toLowerCase()) ||
+          recipe.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
           recipe.ingredients.some((ing) =>
             ing.ingredient.toLowerCase().includes(this.searchTerm.toLowerCase())
           )
@@ -95,56 +88,53 @@ export default class FilterManager {
       });
     }
 
-      // console.log(filteredRecipes);
     // Step 3: Render the filtered recipes
     this.renderRecipes(filteredRecipes);
 
-    // Step 4: Update the dropdowns (filters) based on the filtered recipes
+    // Step 4: Update the dropdown filters based on filtered recipes
     this.updateFiltersBasedOnRecipes(filteredRecipes);
   }
 
   // Update the search term and re-filter recipes
   updateSearchTerm(searchTerm) {
-    this.searchTerm = searchTerm; // Store the search term
+    this.searchTerm = searchTerm.trim(); // Store the search term
     this.updateFiltersAndRenderRecipes(); // Re-filter recipes based on tags and search term
   }
 
-  // Update the dropdowns (filters) based on filtered recipes
+  // Update dropdown options based on the current set of filtered recipes
   updateFiltersBasedOnRecipes(filteredRecipes) {
     const ingredients = new Set();
     const appliances = new Set();
     const utensils = new Set();
 
-    // Loop through filtered recipes to extract ingredients, appliances, and utensils
+    // Extract ingredients, appliances, and utensils from the filtered recipes
     filteredRecipes.forEach((recipe) => {
       recipe.ingredients.forEach((ingredient) => {
         if (ingredient.ingredient) {
-          ingredients.add(ingredient.ingredient);
+          ingredients.add(ingredient.ingredient); // Add ingredient
         }
       });
-      appliances.add(recipe.appliance);
-      recipe.ustensils.forEach((utensil) => utensils.add(utensil));
+      appliances.add(recipe.appliance); // Add appliance
+      recipe.ustensils.forEach((utensil) => utensils.add(utensil)); // Add utensils
     });
 
-
-
-    // Update the dropdowns with new filter options, sorted alphabetically
-    this.ingredientsDropdown.updateOptions([...ingredients].sort((a, b) => a.localeCompare(b)),this.activeTags);
-    this.appliancesDropdown.updateOptions([...appliances].sort((a, b) => a.localeCompare(b)),this.activeTags);
-    this.utensilsDropdown.updateOptions([...utensils].sort((a, b) => a.localeCompare(b)),this.activeTags);
+    // Update dropdown options and sort them alphabetically
+    this.ingredientsDropdown.updateOptions([...ingredients].sort(), this.activeTags);
+    this.appliancesDropdown.updateOptions([...appliances].sort(), this.activeTags);
+    this.utensilsDropdown.updateOptions([...utensils].sort(), this.activeTags);
   }
 
-  // Render filtered recipes
+  // Render the filtered recipes
   renderRecipes(recipes) {
     const container = document.getElementById("recipes-container");
     const recipeCountElement = document.getElementById("recipeCount");
 
     container.innerHTML = ""; // Clear previous results
 
+    // Display a message if no recipes are found
     if (!recipes || recipes.length === 0) {
-      container.innerHTML =
-        '<p class="text-center text-gray-500">Aucune recette trouvée.</p>';
-      recipeCountElement.textContent = "0 recettes affichées"; // Set count to 0
+      container.innerHTML = '<p class="text-center text-gray-500">Aucune recette trouvée.</p>';
+      recipeCountElement.textContent = "0 recettes affichées"; // Set recipe count to 0
       return;
     }
 
@@ -154,27 +144,21 @@ export default class FilterManager {
       container.appendChild(recipeCard.createRecipeCard());
     });
 
-    // Update the recipe count AFTER rendering the recipes
+    // Update the recipe count after rendering
     recipeCountElement.textContent = `${recipes.length} recette${
       recipes.length > 1 ? "s" : ""
     } trouvée${recipes.length > 1 ? "s" : ""}`;
   }
 
-  // Initialize filters and populate dropdowns
+  // Initialize the filters and populate dropdowns
   initFilters() {
     const ingredients = this.api.getAllIngredients();
     const appliances = this.api.getAllAppliances();
     const utensils = this.api.getAllUtensils();
 
-    // Update the dropdowns with sorted values right at initialization
-    this.ingredientsDropdown.updateOptions(
-      ingredients.sort((a, b) => a.localeCompare(b),),this.activeTags
-    );
-    this.appliancesDropdown.updateOptions(
-      appliances.sort((a, b) => a.localeCompare(b)),this.activeTags
-    );
-    this.utensilsDropdown.updateOptions(
-      utensils.sort((a, b) => a.localeCompare(b)),this.activeTags
-    );
+    // Update dropdowns with sorted values at initialization
+    this.ingredientsDropdown.updateOptions(ingredients.sort(), this.activeTags);
+    this.appliancesDropdown.updateOptions(appliances.sort(), this.activeTags);
+    this.utensilsDropdown.updateOptions(utensils.sort(), this.activeTags);
   }
 }
