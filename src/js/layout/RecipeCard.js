@@ -16,7 +16,7 @@ export default class RecipeCard {
   
 	  // Add the recipe image
 	  const img = document.createElement('img');
-	  img.src = `../src/assets/images/${this.recipe.image}`; // Dynamic link to the image
+	  img.src = `./src/assets/images/${this.recipe.image}`; // Dynamic link to the image
 	  img.alt = this.recipe.name; // Alt text for accessibility
 	  img.classList.add('w-full', 'h-48', 'object-cover'); // Tailwind classes for styling the image
 	  card.appendChild(img);
