@@ -1,13 +1,15 @@
 // components/Dropdown.js 
 
 class Dropdown {
-  constructor(buttonId, dropdownId, filterCallback) {
+  constructor(buttonId, dropdownId, arrowClass, filterCallback) {
     this.button = document.getElementById(buttonId);
     this.dropdown = document.getElementById(dropdownId);
     this.dropdownId = dropdownId; // Store dropdownId as a class property
     this.filterCallback = filterCallback;
-    this.arrowDown = this.button.querySelector("#arrow-down"); // Arrow pointing down
-    this.arrowUp = this.button.querySelector("#arrow-up"); // Arrow pointing up
+    
+    // Use class names for arrows instead of IDs
+    this.arrowDown = this.button.querySelector(`.${arrowClass} .arrow-down`); // Arrow pointing down
+    this.arrowUp = this.button.querySelector(`.${arrowClass} .arrow-up`); // Arrow pointing up
 
     // Ensure the button and dropdown exist
     if (!this.button || !this.dropdown) {

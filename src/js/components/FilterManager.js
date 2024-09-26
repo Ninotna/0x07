@@ -1,6 +1,6 @@
-import Dropdown from './Dropdown.js';
-import TagManager from './TagManager.js';
-import RecipeCard from '../layout/RecipeCard.js';
+import Dropdown from "./Dropdown.js";
+import TagManager from "./TagManager.js";
+import RecipeCard from "../layout/RecipeCard.js";
 
 export default class FilterManager {
   constructor(api) {
@@ -23,6 +23,7 @@ export default class FilterManager {
     this.ingredientsDropdown = new Dropdown(
       "ingredientsFilter",
       "ingredientsDropdown",
+      "ingredients-arrow",
       (selectedIngredient) => {
         this.addTagAndUpdate("ingredient", selectedIngredient);
       }
@@ -31,6 +32,7 @@ export default class FilterManager {
     this.appliancesDropdown = new Dropdown(
       "appliancesFilter",
       "appliancesDropdown",
+      "appliances-arrow",
       (selectedAppliance) => {
         this.addTagAndUpdate("appliance", selectedAppliance);
       }
@@ -39,6 +41,7 @@ export default class FilterManager {
     this.utensilsDropdown = new Dropdown(
       "utensilsFilter",
       "utensilsDropdown",
+      "utensils-arrow",
       (selectedUtensil) => {
         this.addTagAndUpdate("utensil", selectedUtensil);
       }
@@ -62,7 +65,9 @@ export default class FilterManager {
     }
 
     // Remove the tag from the corresponding activeTags array
-    this.activeTags[type] = this.activeTags[type].filter((tag) => tag !== value);
+    this.activeTags[type] = this.activeTags[type].filter(
+      (tag) => tag !== value
+    );
 
     // Update the recipe and filter display after removing the tag
     this.updateFiltersAndRenderRecipes();
@@ -73,14 +78,20 @@ export default class FilterManager {
     const { ingredient, appliance, utensil } = this.activeTags;
 
     // Step 1: Filter recipes based on selected tags
-    let filteredRecipes = this.api.getRecipesByTags(ingredient, appliance, utensil);
+    let filteredRecipes = this.api.getRecipesByTags(
+      ingredient,
+      appliance,
+      utensil
+    );
 
     // Step 2: Apply the search term filter (on the already filtered recipes)
     if (this.searchTerm) {
       filteredRecipes = filteredRecipes.filter((recipe) => {
         return (
           recipe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-          recipe.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          recipe.description
+            .toLowerCase()
+            .includes(this.searchTerm.toLowerCase()) ||
           recipe.ingredients.some((ing) =>
             ing.ingredient.toLowerCase().includes(this.searchTerm.toLowerCase())
           )
@@ -119,8 +130,14 @@ export default class FilterManager {
     });
 
     // Update dropdown options and sort them alphabetically
-    this.ingredientsDropdown.updateOptions([...ingredients].sort(), this.activeTags);
-    this.appliancesDropdown.updateOptions([...appliances].sort(), this.activeTags);
+    this.ingredientsDropdown.updateOptions(
+      [...ingredients].sort(),
+      this.activeTags
+    );
+    this.appliancesDropdown.updateOptions(
+      [...appliances].sort(),
+      this.activeTags
+    );
     this.utensilsDropdown.updateOptions([...utensils].sort(), this.activeTags);
   }
 
@@ -133,7 +150,8 @@ export default class FilterManager {
 
     // Display a message if no recipes are found
     if (!recipes || recipes.length === 0) {
-      container.innerHTML = '<p class="text-center text-gray-500">Aucune recette trouvée.</p>';
+      container.innerHTML =
+        '<p class="text-center text-gray-500">Aucune recette trouvée.</p>';
       recipeCountElement.textContent = "0 recettes affichées"; // Set recipe count to 0
       return;
     }

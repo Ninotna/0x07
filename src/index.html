@@ -49,7 +49,9 @@
         />
         <!-- Main Search Container -->
         <div class="w-full max-w-2xl">
-          <div class="flex items-center bg-white rounded-lg shadow-md overflow-hidden">
+          <div
+            class="flex items-center bg-white rounded-lg shadow-md overflow-hidden"
+          >
             <!-- Input Field with Rounded Square Design -->
             <input
               id="search-bar"
@@ -107,22 +109,18 @@
     <!-- Filters Section -->
     <section class="p-8">
       <div class="flex justify-between items-center mb-8">
-        <!-- Filtres alignés à gauche -->
         <div class="flex space-x-4">
-          <!-- Ingrédients Filter -->
+          <!-- Ingredients Filter -->
           <div class="relative inline-block w-full">
             <button
               id="ingredientsFilter"
-              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-[17px_16px] text-gray-700 pr-[63px] focus:outline-none focus:ring-2 focus:ring-customYellow-500 relative"
-              data-default-text="Ingrédients"
+              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
             >
               Ingrédients
               <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                <!-- Flèche vers le bas (par défaut) -->
                 <svg
-                  id="arrow-down"
+                  class="arrow-down ingredients-arrow h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -134,11 +132,9 @@
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
-                <!-- Flèche vers le haut (cachée par défaut) -->
                 <svg
-                  id="arrow-up"
+                  class="arrow-up ingredients-arrow hidden h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 hidden"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -163,26 +159,21 @@
                   class="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
-              <ul class="max-h-48 overflow-y-auto">
-                <!-- Les éléments <li> seront insérés ici dynamiquement via JavaScript -->
-              </ul>
+              <ul class="max-h-48 overflow-y-auto"></ul>
             </div>
           </div>
 
-          <!-- Appareils Filter -->
+          <!-- Appliances Filter -->
           <div class="relative inline-block w-full">
             <button
               id="appliancesFilter"
-              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-[17px_16px] text-gray-700 pr-[63px] focus:outline-none focus:ring-2 focus:ring-customYellow-500 relative"
-              data-default-text="Appareils"
+              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
             >
               Appareils
               <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                <!-- Flèche vers le bas (par défaut) -->
                 <svg
-                  id="arrow-down"
+                  class="arrow-down appliances-arrow h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -194,11 +185,9 @@
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
-                <!-- Flèche vers le haut (cachée par défaut) -->
                 <svg
-                  id="arrow-up"
+                  class="arrow-up appliances-arrow hidden h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 hidden"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -223,26 +212,21 @@
                   class="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
-              <ul class="max-h-48 overflow-y-auto">
-                <!-- Les éléments <li> seront insérés ici dynamiquement via JavaScript -->
-              </ul>
+              <ul class="max-h-48 overflow-y-auto"></ul>
             </div>
           </div>
 
-          <!-- Ustensiles Filter -->
+          <!-- Utensils Filter -->
           <div class="relative inline-block w-full">
             <button
               id="utensilsFilter"
-              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-[17px_16px] text-gray-700 pr-[63px] focus:outline-none focus:ring-2 focus:ring-customYellow-500 relative"
-              data-default-text="Ustensiles"
+              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
             >
               Ustensiles
               <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
-                <!-- Flèche vers le bas (par défaut) -->
                 <svg
-                  id="arrow-down"
+                  class="arrow-down utensils-arrow h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -254,11 +238,9 @@
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
-                <!-- Flèche vers le haut (cachée par défaut) -->
                 <svg
-                  id="arrow-up"
+                  class="arrow-up utensils-arrow hidden h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 hidden"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -283,23 +265,19 @@
                   class="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
-              <ul class="max-h-48 overflow-y-auto">
-                <!-- Les éléments <li> seront insérés ici dynamiquement via JavaScript -->
-              </ul>
+              <ul class="max-h-48 overflow-y-auto"></ul>
             </div>
           </div>
         </div>
 
-        <!-- Compteur de recettes aligné à droite -->
         <div class="text-right">
           <p class="text-gray-700 font-semibold">
             <span id="recipeCount"></span>
           </p>
         </div>
       </div>
-      <div id="tags-container" class="flex flex-wrap gap-4 mt-4">
-        <!-- Les tags sélectionnés apparaîtront ici -->
-      </div>
+
+      <div id="tags-container" class="flex flex-wrap gap-4 mt-4"></div>
     </section>
 
     <!-- Recipe Cards Grid -->
@@ -319,20 +297,20 @@
     <script>
       // Show or hide the clear button based on input
       function handleInput(input) {
-        const clearBtn = document.getElementById('clear-btn');
+        const clearBtn = document.getElementById("clear-btn");
         if (input.value.length > 0) {
-          clearBtn.classList.remove('hidden');
+          clearBtn.classList.remove("hidden");
         } else {
-          clearBtn.classList.add('hidden');
+          clearBtn.classList.add("hidden");
         }
       }
 
       // Clear the search input and hide the clear button
       function clearInput() {
-        const input = document.getElementById('search-bar');
-        const clearBtn = document.getElementById('clear-btn');
-        input.value = '';
-        clearBtn.classList.add('hidden');
+        const input = document.getElementById("search-bar");
+        const clearBtn = document.getElementById("clear-btn");
+        input.value = "";
+        clearBtn.classList.add("hidden");
       }
     </script>
   </body>
