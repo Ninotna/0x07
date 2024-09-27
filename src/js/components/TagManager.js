@@ -74,13 +74,5 @@ export default class TagManager {
             console.error('filterManager.removeFilter is not defined or is not a function');
         }
     }
-
-    /**
-     * Optionally, clear all tags from the UI and reset the tag state.
-     */
-    clearTags() {
-        this.container.innerHTML = ''; // Remove all tag elements from the container
-        this.tags = {}; // Reset the internal tag tracking
-    }
 }
 
