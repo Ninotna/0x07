@@ -21,31 +21,37 @@ export default class FilterManager {
 
     // Initialize dropdowns for ingredients, appliances, and utensils
     this.ingredientsDropdown = new Dropdown(
-      "ingredientsFilter",
-      "ingredientsDropdown",
-      "ingredients-arrow",
+      "ingredientsFilter", // Button ID
+      "ingredientsDropdown", // Dropdown ID
+      "ingredients", // Arrow ID prefix
       (selectedIngredient) => {
         this.addTagAndUpdate("ingredient", selectedIngredient);
       }
     );
 
     this.appliancesDropdown = new Dropdown(
-      "appliancesFilter",
-      "appliancesDropdown",
-      "appliances-arrow",
+      "appliancesFilter", // Button ID
+      "appliancesDropdown", // Dropdown ID
+      "appliances", // Arrow ID prefix
       (selectedAppliance) => {
         this.addTagAndUpdate("appliance", selectedAppliance);
       }
     );
 
     this.utensilsDropdown = new Dropdown(
-      "utensilsFilter",
-      "utensilsDropdown",
-      "utensils-arrow",
+      "utensilsFilter", // Button ID
+      "utensilsDropdown", // Dropdown ID
+      "utensils", // Arrow ID prefix
       (selectedUtensil) => {
         this.addTagAndUpdate("utensil", selectedUtensil);
       }
     );
+  }
+
+  // Update the search term and re-filter recipes
+  updateSearchTerm(searchTerm) {
+    this.searchTerm = searchTerm.trim(); // Store the search term
+    this.updateFiltersAndRenderRecipes(); // Re-filter recipes based on tags and search term
   }
 
   // Add the selected tag, update activeTags, and refresh recipe display
@@ -170,13 +176,45 @@ export default class FilterManager {
 
   // Initialize the filters and populate dropdowns
   initFilters() {
+    // Get the initial ingredients, appliances, and utensils from the API
     const ingredients = this.api.getAllIngredients();
     const appliances = this.api.getAllAppliances();
     const utensils = this.api.getAllUtensils();
 
-    // Update dropdowns with sorted values at initialization
-    this.ingredientsDropdown.updateOptions(ingredients.sort(), this.activeTags);
-    this.appliancesDropdown.updateOptions(appliances.sort(), this.activeTags);
-    this.utensilsDropdown.updateOptions(utensils.sort(), this.activeTags);
+    // Ensure each dropdown has been initialized
+    // console.log("Ingredients Dropdown:", this.ingredientsDropdown);
+    // console.log("Appliances Dropdown:", this.appliancesDropdown);
+    // console.log("Utensils Dropdown:", this.utensilsDropdown);
+
+    // Make sure the dropdowns are defined before calling updateOptions
+    if (
+      this.ingredientsDropdown &&
+      typeof this.ingredientsDropdown.updateOptions === "function"
+    ) {
+      this.ingredientsDropdown.updateOptions(
+        ingredients.sort(),
+        this.activeTags
+      );
+    } else {
+      console.error("Ingredients Dropdown is not properly initialized.");
+    }
+
+    if (
+      this.appliancesDropdown &&
+      typeof this.appliancesDropdown.updateOptions === "function"
+    ) {
+      this.appliancesDropdown.updateOptions(appliances.sort(), this.activeTags);
+    } else {
+      console.error("Appliances Dropdown is not properly initialized.");
+    }
+
+    if (
+      this.utensilsDropdown &&
+      typeof this.utensilsDropdown.updateOptions === "function"
+    ) {
+      this.utensilsDropdown.updateOptions(utensils.sort(), this.activeTags);
+    } else {
+      console.error("Utensils Dropdown is not properly initialized.");
+    }
   }
 }

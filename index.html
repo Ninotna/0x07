@@ -85,8 +85,8 @@
               <button
                 class="bg-black hover:bg-gray-800 text-white search-button flex items-center justify-center"
               >
-            <img src="/src/assets/design/glass.svg"/>
-          </button>
+                <img src="/src/assets/design/glass.svg" />
+              </button>
             </div>
           </div>
         </div>
@@ -101,12 +101,14 @@
           <div class="relative inline-block w-full">
             <button
               id="ingredientsFilter"
-              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
+              class="dropdown-button w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
             >
               Ingrédients
               <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                <!-- Arrow Down SVG -->
                 <svg
-                  class="arrow-down ingredients-arrow h-6 w-6"
+                  id="arrow-down-ingredients"
+                  class="arrow-down h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -119,8 +121,10 @@
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
+                <!-- Arrow Up SVG (hidden by default) -->
                 <svg
-                  class="arrow-up ingredients-arrow hidden h-6 w-6"
+                  id="arrow-up-ingredients"
+                  class="arrow-up hidden h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -135,9 +139,10 @@
                 </svg>
               </span>
             </button>
+
             <div
               id="ingredientsDropdown"
-              class="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden z-50"
+              class="dropdown-menu absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md hidden z-50"
             >
               <div class="p-2">
                 <input
@@ -154,12 +159,14 @@
           <div class="relative inline-block w-full">
             <button
               id="appliancesFilter"
-              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
+              class="dropdown-button w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
             >
               Appareils
               <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                <!-- Arrow Down for Appliances -->
                 <svg
-                  class="arrow-down appliances-arrow h-6 w-6"
+                  id="arrow-down-appliances"
+                  class="arrow-down h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -172,8 +179,10 @@
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
+                <!-- Arrow Up for Appliances (Hidden by Default) -->
                 <svg
-                  class="arrow-up appliances-arrow hidden h-6 w-6"
+                  id="arrow-up-appliances"
+                  class="arrow-up hidden h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -207,12 +216,14 @@
           <div class="relative inline-block w-full">
             <button
               id="utensilsFilter"
-              class="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
+              class="dropdown-button w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 text-gray-700 pr-16 relative"
             >
               Ustensiles
               <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                <!-- Arrow Down for Utensils -->
                 <svg
-                  class="arrow-down utensils-arrow h-6 w-6"
+                  id="arrow-down-utensils"
+                  class="arrow-down h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -225,8 +236,10 @@
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
+                <!-- Arrow Up for Utensils (Hidden by Default) -->
                 <svg
-                  class="arrow-up utensils-arrow hidden h-6 w-6"
+                  id="arrow-up-utensils"
+                  class="arrow-up hidden h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -291,14 +304,15 @@
           clearBtn.classList.add("hidden");
         }
       }
-
       // Clear the search input and hide the clear button
-      function clearInput() {
-        const input = document.getElementById("search-bar");
-        const clearBtn = document.getElementById("clear-btn");
-        input.value = "";
-        clearBtn.classList.add("hidden");
-      }
+      /*
+        function clearInput() {
+          const input = document.getElementById("search-bar");
+          const clearBtn = document.getElementById("clear-btn");
+          input.value = "";
+          clearBtn.classList.add("hidden");
+        }
+        */
     </script>
   </body>
 </html>

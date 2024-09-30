@@ -97,5 +97,19 @@ document.querySelectorAll(".dropdown-search").forEach((dropdownSearchBar) => {
   });
 });
 
+// Clear the search input and hide the clear button, then trigger the filter update
+// Ensure the function is in the global scope
+window.clearInput = function () {
+  const input = document.getElementById("search-bar");
+  const clearBtn = document.getElementById("clear-btn");
+
+  input.value = "";  // Clear the input
+  clearBtn.classList.add("hidden");  // Hide the clear button
+
+  // Trigger the filter update logic to re-render the results
+  filterManager.updateSearchTerm("");  // Clear the search term in the FilterManager
+};
+
+
 // Display the initial set of recipes
 displayManager.renderRecipes(recipes);
