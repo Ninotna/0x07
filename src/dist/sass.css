@@ -1,0 +1,163 @@
+/* Adjust button and input size and shape to be rounded square */
+.search-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px; /* Rounded square format */
+}
+
+.search-button img {
+  width: 27px;
+  height: 28px;
+}
+
+.search-input {
+  border-radius: 12px; /* Rounded square input */
+}
+
+.clear-btn {
+  cursor: pointer;
+}
+
+.main_title {
+  font-size: 44px;
+  text-align: center;
+}
+
+.background {
+  height: 665px;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  padding: 40px 60px;
+}
+
+.header {
+  padding: 40px 20px;
+  height: 350px;
+}
+
+.header::after {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url(/src/assets/design/background_image.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: brightness(0.7);
+}
+
+.header_logo {
+  width: 200px;
+}
+
+.header_cta {
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.header_cta h1 {
+  display: flex;
+  flex-direction: column;
+  color: #ffd15b;
+  font-family: "Anton", sans-serif;
+  font-weight: 100;
+  text-align: left;
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  text-transform: uppercase;
+}
+
+.header_cta div {
+  position: relative;
+  max-width: 1024px;
+  width: 100%;
+}
+
+.header_cta div input {
+  width: 100%;
+  height: 70px;
+  padding-left: 30px;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  border-radius: 10px;
+}
+
+.header_cta div input::placeholder {
+  font-size: clamp(0.7rem, 2vw, 1.6rem);
+}
+
+.header_cta div input:focus {
+  outline: 2px solid #ffd15b;
+}
+
+.header_cta div input {
+  padding-left: 10px;
+  height: 72px;
+}
+
+.header_cta div label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #000;
+  margin-right: 10px;
+}
+
+.header_cta div label:focus,
+.header_cta div label:hover {
+  background-color: #ffd15b;
+}
+
+.header_cta div label:focus::after,
+.header_cta div label:hover::after {
+  color: #000;
+}
+
+.header_cta div button {
+  display: none;
+  position: absolute;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fff;
+  margin-right: 10px;
+}
+
+.header_cta div button:hover::after,
+.header_cta div button:focus::after {
+  color: #ffd15b;
+}
+
+.header_cta div button {
+  right: 65px;
+}
+
+.header_cta div button::after {
+  content: "\f00d";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #7a7a7a;
+}
+
+.header_cta div button::after {
+  font-size: 1.2rem;
+}
+
+/*# sourceMappingURL=sass.css.map */
