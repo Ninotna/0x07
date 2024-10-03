@@ -119,7 +119,7 @@ class Dropdown {
         "px-4",
         "py-2",
         "text-gray-700",
-        "hover:bg-gray-100",
+        "hover:bg-customYellow-400",
         "cursor-pointer"
       );
       ul.appendChild(li);

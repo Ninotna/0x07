@@ -9,97 +9,79 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <!-- Google Fonts - Anton and Manrope -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Lien vers le fichier CSS généré par Tailwind -->
     <link href="./src/dist/styles.css" rel="stylesheet" />
+    <link href="./src/dist/sass.css" rel="stylesheet" />
     <!-- Lien vers votre fichier JavaScript principal -->
     <script type="module" src="./src/js/main.js"></script>
-
-    <style>
-      /* Adjust button and input size and shape to be rounded square */
-      .search-button {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px; /* Rounded square format */
-      }
-
-      .search-button img {
-        width: 27px;
-        height: 28px;
-      }
-
-      .search-input {
-        border-radius: 12px; /* Rounded square input */
-      }
-
-      .clear-btn {
-        cursor: pointer;
-      }
-    </style>
   </head>
 
   <body class="bg-gray-100">
     <!-- Header with Logo and Search Bar -->
-    <header
-      class="relative bg-cover bg-center h-64"
-      style="background-image: url('./src/assets/design/background_image.jpg')"
-    >
+    <header class="relative bg-cover bg-center header" style="background-image: url('./src/assets/design/background_image.jpg')">
       <div class="absolute inset-0 bg-black opacity-50"></div>
-      <div
-        class="relative z-10 flex flex-col items-center justify-center h-full"
-      >
-        <img
-          src="./src/assets/design/logo.png"
-          alt="Les Petits Plats Logo"
-          class="h-12 mb-4"
-        />
-        <!-- Main Search Container -->
+    
+      <!-- Logo Section -->
+      <div class="relative z-10 flex flex-col items-start justify-start ml-[69px] mt-[50px]">
+        <img class="header_logo w-44 h-18 object-contain" src="./src/assets/design/logo-.svg" alt="Les petits plats" />
+      </div>
+    
+      <!-- Title and Search Section -->
+      <div class="header_cta relative z-10 flex flex-col items-start justify-start mt-8 ml-[69px]">
+        <h1 class="font-anton text-customYellow-500 text-4xl mb-8">
+          <span>Cherchez parmi plus de 1500 recettes</span>
+          <span>du quotidien, simples et délicieuses</span>
+        </h1>
+        
+        <!-- Search Input with Clear and Search Buttons -->
         <div class="w-full max-w-2xl">
-          <div
-            class="flex items-center bg-white rounded-lg shadow-md overflow-hidden"
-          >
-            <!-- Input Field with Rounded Square Design -->
+          <div class="flex items-center bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Input Field with event handler -->
             <input
               id="search-bar"
               type="text"
               placeholder="Rechercher une recette, un ingrédient..."
-              class="flex-grow p-4 search-input outline-none text-gray-700"
+              maxlength="50"
+              class="flex-grow p-4 search-input outline-none text-gray-700 font-manrope"
               oninput="handleInput(this)"
             />
-
-            <!-- Search and Clear Buttons -->
-            <div class="flex items-center px-4">
-              <!-- Clear button, hidden initially -->
-              <svg
-                id="clear-btn"
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-gray-500 hidden clear-btn"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                onclick="clearInput()"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+            
+            <!-- Clear Button (hidden initially) -->
+            <button
+              class="clear-btn hidden h-6 w-6 text-gray-500"
+              aria-hidden="true"
+              aria-label="Clear search"
+              onclick="clearInput()"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
-
-              <!-- Search Button with Magnifying Glass Icon, Rounded Square -->
-              <button
-                class="bg-black hover:bg-gray-800 text-white search-button flex items-center justify-center"
-              >
-                <img src="./src/assets/design/glass.png" />
-              </button>
-            </div>
+            </button>
+            
+            <!-- Search Button -->
+            <label
+              for="search-recipe"
+              tabindex="0"
+              aria-label="Search recipe"
+              class="flex items-center justify-center bg-black hover:bg-gray-800 text-white search-button h-12 w-12"
+            >
+              <img src="./src/assets/design/glass.png" alt="Search" />
+            </label>
           </div>
         </div>
       </div>
     </header>
+    
+  
 
     <!-- Filters Section -->
-    <div class="p-8">
+    <div class="container mx-auto px-4 p-8">
       <div class="flex justify-between items-center mb-8">
         <div class="flex space-x-4">
           <!-- Ingredients Filter -->

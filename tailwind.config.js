@@ -11,6 +11,13 @@ module.exports = {
         "20px": "20px",
         "24px": "24px",
         "32px": "32px",
+        "44px": "44px",
+        "69px": "69px",
+        "50px": "50px"
+      },
+      fontFamily: {
+        anton: ["Anton", "sans-serif"], // Custom font for Anton
+        manrope: ["Manrope", "sans-serif"], // Custom font for Manrope
       },
       colors: {
         customYellow: {
@@ -22,7 +29,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/line-clamp'),
-  ],
+  plugins: [require("@tailwindcss/line-clamp")],
 };
