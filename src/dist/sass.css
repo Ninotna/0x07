@@ -23,17 +23,14 @@
   text-align: center;
 }
 
-.background {
-  height: 665px;
-}
-
-.header {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 50vh;
+header {
   padding: 40px 20px;
   height: 955px;
+  background-image: url("../assets/design/background_image.jpg");
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Ensure the image doesn't repeat */
+  background-size: cover; /* Ensure the image covers the entire container */
+  position: relative;
 }
 
 .header_logo {
@@ -68,7 +65,6 @@
   position: relative;
   max-width: 1024px;
   width: 954px;
-  margin-bottom: 267px;
 }
 
 .header_cta div input {
