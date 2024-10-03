@@ -32,33 +32,31 @@
   display: flex;
   flex-direction: column;
   height: 50vh;
-  padding: 40px 60px;
-}
-.header {
   padding: 40px 20px;
-  height: 350px;
+  height: 955px;
 }
 
-.header::after {
-  content: "";
-  z-index: -1;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url(/src/assets/design/background_image.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  filter: brightness(0.7);
-}
+// .header::after {
+//   content: "";
+//   z-index: -1;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   background: url(/src/assets/design/background_image.jpg);
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+//   filter: brightness(0.7);
+// }
+
 .header_logo {
   width: 200px;
 }
 .header_cta {
   text-align: center;
-  flex-grow: 1;
+  // flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -71,22 +69,28 @@
   flex-direction: column;
   color: #ffd15b;
   font-family: "Anton", sans-serif;
-  font-weight: 100;
   text-align: left;
-  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  font-size: 44px;
   text-transform: uppercase;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 250px auto 30px auto;
 }
 .header_cta div {
   position: relative;
   max-width: 1024px;
-  width: 100%;
+  // width: 100%;
+  width:954px;
+  margin-bottom: 267px;
+
 }
 .header_cta div input {
   width: 100%;
-  height: 70px;
-  padding-left: 30px;
+  height: 72px;
+  padding-left: 35px;
   font-family: "Manrope", sans-serif;
-  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-size: 16px;
   border-radius: 10px;
 }
 .header_cta div input::placeholder {
@@ -94,11 +98,6 @@
 }
 .header_cta div input:focus {
   outline: 2px solid #ffd15b;
-}
-
-.header_cta div input {
-  padding-left: 10px;
-  height: 72px;
 }
 
 .header_cta div label {
@@ -148,7 +147,7 @@
   top: 50%;
   transform: translateY(-50%);
   background-color: #fff;
-  margin-right:10px;
+  margin-right: 10px;
 }
 .header_cta div button:hover::after,
 .header_cta div button:focus::after {
@@ -158,13 +157,50 @@
 .header_cta div button {
   right: 65px;
 }
-.header_cta div button::after {
-  content: "\f00d";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 600;
-  font-size: 1.5rem;
-  color: #7a7a7a;
+// .header_cta div button::after {
+//   content: "\f00d";
+//   font-family: "Font Awesome 5 Free";
+//   font-weight: 600;
+//   font-size: 1.5rem;
+//   color: #7a7a7a;
+// }
+// .header_cta div button::after {
+//   font-size: 1.2rem;
+// }
+
+#filters {
+
 }
-.header_cta div button::after {
-  font-size: 1.2rem;
+
+.clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px; /* Matches the height of your button */
+  width: 24px;  /* Matches the width of your button */
+  background: none; /* No background color */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Show pointer cursor on hover */
+  padding: 0; /* Remove padding */
+}
+
+.clear-btn svg {
+  height: 100%;
+  width: 100%;
+  color: #6b7280; /* Tailwind's gray-500 */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.clear-btn:hover svg {
+  color: #4b5563; /* Darker gray on hover (Tailwind's gray-600) */
+}
+
+.clear-btn:focus {
+  outline: none; /* Remove focus outline */
+}
+
+.hidden {
+  display: none;
 }

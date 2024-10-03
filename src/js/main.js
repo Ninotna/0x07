@@ -99,16 +99,29 @@ document.querySelectorAll(".dropdown-search").forEach((dropdownSearchBar) => {
 
 // Clear the search input and hide the clear button, then trigger the filter update
 // Ensure the function is in the global scope
-window.clearInput = function () {
-  const input = document.getElementById("search-bar");
-  const clearBtn = document.getElementById("clear-btn");
+window.handleInput = function(input) 
+{
+    const clearButton = document.querySelector('.clear-btn');
+    
+    if (input.value.length > 0) 
+    {
+        clearButton.classList.remove('hidden'); // Show the clear button
+    } 
+    else 
+    {
+        clearButton.classList.add('hidden'); // Hide the clear button
+    }
+}
 
-  input.value = "";  // Clear the input
-  clearBtn.classList.add("hidden");  // Hide the clear button
+window.clearInput = function() 
+{
+    const input = document.querySelector('#search-bar');
+    const clearButton = document.querySelector('.clear-btn');
+    
+    input.value = '';  // Clear the input
+    clearButton.classList.add('hidden');  // Hide the clear button again
+}
 
-  // Trigger the filter update logic to re-render the results
-  filterManager.updateSearchTerm("");  // Clear the search term in the FilterManager
-};
 
 
 // Display the initial set of recipes

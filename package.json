@@ -5,13 +5,14 @@
   "main": "recipes.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "tailwindcss -i ./src/styles.css -o ./src/dist/styles.css --watch"
+    "build:css": "concurrently \"tailwindcss -i ./src/styles.css -o ./src/dist/styles.css --watch\" \"npx sass src/styles/main.scss:src/dist/sass.css --watch\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.0.1",
     "postcss": "^8.4.44",
     "sass": "^1.79.4",
     "tailwindcss": "^3.4.10"
