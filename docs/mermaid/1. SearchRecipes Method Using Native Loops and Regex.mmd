@@ -1,0 +1,14 @@
+flowchart TD
+    A(START) --> B{Is the search term length less than 3 characters?}
+    B -- Yes --> C[Return an empty array]
+    B -- No --> D[Store the recipes from the JSON data]
+    D --> E[Initialize a new array to store filtered results]
+    E --> F["Receive user request (enter 3 characters in the search bar)"]
+    F --> G[For loop through the initial array]
+    G --> H[For each recipe, extract the description, ingredients, and name]
+    H --> I["Use regex to match the search term in each field (description, ingredients, name)"]
+    I --> J{Is a match found?}
+    J -- Yes --> K[Add the recipe to the results array]
+    K --> G
+    J -- No --> L[End of the loop: Return the filtered recipes]
+    L --> M(END)
