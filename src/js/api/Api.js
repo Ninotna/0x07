@@ -9,6 +9,12 @@ export default class Api {
     this.data = data;
   }
 
+  // Retrieve all recipes
+  getAllRecipes() {
+    // Return the full array of recipes
+    return this.data;
+  }
+
   // Retrieve all unique ingredients from the recipes
   getAllIngredients() {
     if (!this.data || !Array.isArray(this.data)) {

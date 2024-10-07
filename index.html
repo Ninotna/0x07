@@ -27,8 +27,7 @@
     <!-- <header
       class="relative bg-cover header"
     > -->
-    <header
-    >
+    <header>
       <div class="absolute inset-0 bg-black opacity-50"></div>
 
       <!-- Logo Section -->
@@ -47,8 +46,10 @@
         class="header_cta relative z-10 flex flex-col items-start justify-start mt-8 ml-[69px]"
       >
         <h1>
-          <span>Cherchez parmi plus de 1500 recettes</span>
-          <span>du quotidien, simples et délicieuses</span>
+          <span
+            >Cherchez parmi plus de 1500 recettes<br />
+            du quotidien,simples et délicieuses</span
+          >
         </h1>
 
         <!-- Search Input with Clear and Search Buttons -->
@@ -66,8 +67,7 @@
               oninput="handleInput(this)"
             />
 
-            <!-- Clear Button (starts as hidden) -->
-            <!-- Clear Button (starts as hidden) -->
+            <!-- Clear Button (initially hidden) -->
             <button
               class="clear-btn hidden h-6 w-6 text-gray-500"
               aria-hidden="true"
@@ -90,14 +90,13 @@
             </button>
 
             <!-- Search Button -->
-            <label
-              for="search-recipe"
-              tabindex="0"
-              aria-label="Search recipe"
+            <button
               class="flex items-center justify-center bg-black hover:bg-gray-800 text-white search-button h-12 w-12"
+              aria-label="Search recipe"
+              onclick="performSearch()"
             >
               <img src="./src/assets/design/glass.png" alt="Search" />
-            </label>
+            </button>
           </div>
         </div>
       </div>

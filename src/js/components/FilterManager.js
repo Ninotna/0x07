@@ -79,6 +79,33 @@ export default class FilterManager {
     this.updateFiltersAndRenderRecipes();
   }
 
+  // New Method: Reset all filters and show all recipes
+  resetFilters() {
+    // Clear active tags
+    this.activeTags = {
+      ingredient: [],
+      appliance: [],
+      utensil: [],
+    };
+
+    // Clear the search term
+    this.searchTerm = "";
+
+    // Clear all UI tags from the tag manager
+    this.tagManager.clearAllTags(); // Assuming you have this method in TagManager
+
+    // Reset dropdowns to their default states
+    this.ingredientsDropdown.reset(); // Assuming Dropdown has a reset method
+    this.appliancesDropdown.reset(); // Assuming Dropdown has a reset method
+    this.utensilsDropdown.reset(); // Assuming Dropdown has a reset method
+
+    // Show all recipes after clearing filters and search term
+    this.renderRecipes(this.api.getAllRecipes());
+
+    // Optionally update dropdown options based on all recipes
+    this.updateFiltersBasedOnRecipes(this.api.getAllRecipes());
+  }
+
   // Update recipe and filter display based on both active tags and search term
   updateFiltersAndRenderRecipes() {
     const { ingredient, appliance, utensil } = this.activeTags;
@@ -110,12 +137,6 @@ export default class FilterManager {
 
     // Step 4: Update the dropdown filters based on filtered recipes
     this.updateFiltersBasedOnRecipes(filteredRecipes);
-  }
-
-  // Update the search term and re-filter recipes
-  updateSearchTerm(searchTerm) {
-    this.searchTerm = searchTerm.trim(); // Store the search term
-    this.updateFiltersAndRenderRecipes(); // Re-filter recipes based on tags and search term
   }
 
   // Update dropdown options based on the current set of filtered recipes
@@ -182,11 +203,6 @@ export default class FilterManager {
     const utensils = this.api.getAllUtensils();
 
     // Ensure each dropdown has been initialized
-    // console.log("Ingredients Dropdown:", this.ingredientsDropdown);
-    // console.log("Appliances Dropdown:", this.appliancesDropdown);
-    // console.log("Utensils Dropdown:", this.utensilsDropdown);
-
-    // Make sure the dropdowns are defined before calling updateOptions
     if (
       this.ingredientsDropdown &&
       typeof this.ingredientsDropdown.updateOptions === "function"

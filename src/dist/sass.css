@@ -1,8 +1,15 @@
-/* Adjust button and input size and shape to be rounded square */
+/* Search Button Styling */
 .search-button {
   width: 50px;
   height: 50px;
   border-radius: 12px; /* Rounded square format */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000; /* Black background for search button */
+  cursor: pointer;
+  border: none;
+  padding: 0;
 }
 
 .search-button img {
@@ -10,26 +17,36 @@
   height: 28px;
 }
 
+/* Search Input Styling */
 .search-input {
   border-radius: 12px; /* Rounded square input */
+  padding: 12px 50px 12px 15px; /* Add padding for clear and search buttons */
+  outline: none; /* Remove default focus outline */
+  width: 100%; /* Full width */
+  font-size: 16px;
+  font-family: "Manrope", sans-serif;
+  color: #333;
 }
 
-.clear-btn {
-  cursor: pointer;
+.search-input::placeholder {
+  color: #bbb; /* Placeholder text color */
+  font-size: 14px;
 }
 
+/* Main Title Styling */
 .main_title {
   font-size: 44px;
   text-align: center;
 }
 
+/* Header Styling */
 header {
   padding: 40px 20px;
   height: 955px;
   background-image: url("../assets/design/background_image.jpg");
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Ensure the image doesn't repeat */
-  background-size: cover; /* Ensure the image covers the entire container */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   position: relative;
 }
 
@@ -37,6 +54,7 @@ header {
   width: 200px;
 }
 
+/* Call-to-Action (CTA) Styling */
 .header_cta {
   text-align: center;
   display: flex;
@@ -48,16 +66,12 @@ header {
 }
 
 .header_cta h1 {
-  display: flex;
-  flex-direction: column;
   color: #ffd15b;
   font-family: "Anton", sans-serif;
-  text-align: left;
+  text-align: center;
   font-size: 44px;
   text-transform: uppercase;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
   margin: 250px auto 30px auto;
 }
 
@@ -80,10 +94,7 @@ header {
   font-size: clamp(0.7rem, 2vw, 1.6rem);
 }
 
-.header_cta div input:focus {
-  outline: 2px solid #ffd15b;
-}
-
+/* Label Styling */
 .header_cta div label {
   display: flex;
   flex-direction: column;
@@ -99,40 +110,22 @@ header {
   background-color: #ffd15b;
 }
 
-.header_cta div label:focus::after,
-.header_cta div label:hover::after {
-  color: #000;
-}
-
-.header_cta div button {
-  display: none;
+/* Clear Button Styling */
+.clear-btn {
   position: absolute;
-  right: 80px;
+  right: 60px; /* Adjusted for the correct positioning */
   top: 50%;
   transform: translateY(-50%);
-  background-color: #fff;
-  margin-right: 10px;
-}
-
-.header_cta div button:hover::after,
-.header_cta div button:focus::after {
-  color: #ffd15b;
-}
-
-.header_cta div button {
-  right: 65px;
-}
-
-.clear-btn {
+  height: 24px;
+  width: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  visibility: hidden; /* Initially hidden */
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 24px; /* Matches the height of your button */
-  width: 24px; /* Matches the width of your button */
-  background: none; /* No background color */
-  border: none; /* Remove default button border */
-  cursor: pointer; /* Show pointer cursor on hover */
-  padding: 0; /* Remove padding */
 }
 
 .clear-btn svg {
@@ -145,15 +138,36 @@ header {
 }
 
 .clear-btn:hover svg {
-  color: #4b5563; /* Darker gray on hover (Tailwind's gray-600) */
+  color: #4b5563; /* Darker gray on hover */
 }
 
 .clear-btn:focus {
-  outline: none; /* Remove focus outline */
+  outline: none;
 }
 
-.hidden {
-  display: none;
+/* Show clear button when input has content */
+input:not(:placeholder-shown) + .clear-btn {
+  visibility: visible;
+}
+
+/* Search Container Styling */
+.search-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
+  padding: 0;
+}
+
+input[type=text] {
+  padding-right: 50px; /* Ensure space for the search button */
+  width: 100%;
+}
+
+input:focus {
+  outline: none; /* Removing the default outline for better design */
 }
 
 /*# sourceMappingURL=sass.css.map */

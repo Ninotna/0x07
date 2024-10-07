@@ -152,6 +152,13 @@ class Dropdown {
         : "none"; // Show/hide items based on match
     });
   }
+
+    // Method to reset the dropdown to its default state
+    reset() {
+      if (this.dropdown) {
+        this.dropdown.selectedIndex = 0; // Set dropdown to the first (default) option
+      }
+    }
 }
 
 export default Dropdown;
