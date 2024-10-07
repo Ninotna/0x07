@@ -8,7 +8,7 @@ class RecipeSearchManager {
   }
 
   /**
-   * Search for recipes that match the given search term using native loops and regex
+   * Search for recipes that match the given search term
    * @param {string} searchTerm - The search term entered by the user
    * @returns {Array} - An array of filtered recipes or an empty array if none found
    */
@@ -20,38 +20,26 @@ class RecipeSearchManager {
       return [];
     }
 
-    const foundRecipes = []; // Array to store found recipes
-    const regex = new RegExp(searchTerm.toLowerCase(), "i"); // Create regex for case-insensitive search
+    const lowerCasedSearchTerm = searchTerm.toLowerCase(); // Convert search term to lowercase for case-insensitive comparison
 
-    // Loop through all recipes to find matches
-    for (let i = 0; i < this.recipes.length; i++) {
-      const recipe = this.recipes[i];
+    // Filter the recipes based on the search term
+    return this.recipes.filter((recipe) => {
+      // Check if the recipe name or description contains the search term
+      const recipeNameMatch = recipe.name
+        .toLowerCase()
+        .includes(lowerCasedSearchTerm);
+      const recipeDescriptionMatch = recipe.description
+        .toLowerCase()
+        .includes(lowerCasedSearchTerm);
 
-      // Match the search term using regex in the recipe name and description
-      const recipeNameMatch = regex.test(recipe.name);
-      const recipeDescriptionMatch = regex.test(recipe.description);
+      // Check if any ingredient contains the search term
+      const ingredientMatch = recipe.ingredients.find((ingredient) =>
+        ingredient.ingredient.toLowerCase().includes(lowerCasedSearchTerm)
+      );
 
-      let ingredientMatch = false; // Indicator for matching ingredients
-      const ingredientList = recipe.ingredients;
-
-      // Loop through the ingredients of the recipe
-      for (let j = 0; j < ingredientList.length; j++) {
-        const ingredient = ingredientList[j].ingredient.toLowerCase();
-
-        // Check if the ingredient matches the search term using regex
-        if (regex.test(ingredient)) {
-          ingredientMatch = true; // Mark ingredient as found
-          break; // Exit loop once a match is found
-        }
-      }
-
-      // Check if the search term is in the recipe name, description, or ingredients
-      if (recipeNameMatch || recipeDescriptionMatch || ingredientMatch) {
-        foundRecipes.push(recipe); // Add the found recipe to the array
-      }
-    }
-
-    return foundRecipes;
+      // Return true if the recipe name, description, or any ingredient matches the search term
+      return recipeNameMatch || recipeDescriptionMatch || ingredientMatch;
+    });
   }
 
   /**
@@ -91,5 +79,3 @@ class RecipeSearchManager {
 }
 
 export default RecipeSearchManager;
-
-
