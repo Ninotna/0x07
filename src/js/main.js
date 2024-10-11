@@ -6,6 +6,7 @@ import Dropdown from "./components/Dropdown.js"; // Dropdown functionality
 import RecipeDisplayManager from "./utils/RecipeDisplayManager.js"; // Manages recipe display logic
 import RecipeSearchManager from "./components/RecipeSearchManager.js"; // Handles main search functionality
 import RecipeCard from "./layout/RecipeCard.js"; // Manages individual recipe card layout
+import SearchBarController from "./components/SearchBarController.js";
 
 // Initialize API with recipe data
 const api = new Api(recipes);
@@ -179,3 +180,10 @@ window.performSearch = function() {
 
 // Display the initial set of recipes
 displayManager.renderRecipes(recipes);
+
+  // Instantiate SearchBarController
+const searchBarController = new SearchBarController(
+	searchManager,
+	filterManager,
+	renderRecipes
+  );

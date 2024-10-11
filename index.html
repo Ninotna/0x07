@@ -64,7 +64,6 @@
               placeholder="Rechercher une recette, un ingrédient..."
               maxlength="50"
               class="flex-grow p-4 search-input outline-none text-gray-700 font-manrope"
-              oninput="handleInput(this)"
             />
 
             <!-- Clear Button (initially hidden) -->
@@ -72,7 +71,6 @@
               class="clear-btn hidden h-6 w-6 text-gray-500"
               aria-hidden="true"
               aria-label="Clear search"
-              onclick="clearInput()"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +91,6 @@
             <button
               class="flex items-center justify-center bg-black hover:bg-gray-800 text-white search-button h-12 w-12"
               aria-label="Search recipe"
-              onclick="performSearch()"
             >
               <img src="./src/assets/design/glass.png" alt="Search" />
             </button>
