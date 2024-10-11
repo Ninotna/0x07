@@ -1,4 +1,4 @@
-// api/Api.js
+import BasicStemmerFr from '../utils/BasicStemmerFr.js'; // Import your custom French stemmer
 
 export default class Api {
   constructor(data) {
@@ -7,6 +7,12 @@ export default class Api {
       throw new Error("Recipe data must be an array.");
     }
     this.data = data;
+    this.stemmer = new BasicStemmerFr(); // Initialize your custom French stemmer
+  }
+
+  // Function to normalize and stem words using your custom stemmer
+  normalizeWord(word) {
+    return this.stemmer.stem(word.toLowerCase().trim());
   }
 
   // Retrieve all recipes
@@ -26,9 +32,9 @@ export default class Api {
 
     this.data.forEach((recipe) => {
       recipe.ingredients.forEach((ingredient) => {
-        const lowerCaseIngredient = ingredient.ingredient.toLowerCase();
-        if (!ingredientsMap.has(lowerCaseIngredient)) {
-          ingredientsMap.set(lowerCaseIngredient, ingredient.ingredient);
+        const normalizedIngredient = this.normalizeWord(ingredient.ingredient);
+        if (!ingredientsMap.has(normalizedIngredient)) {
+          ingredientsMap.set(normalizedIngredient, ingredient.ingredient);
         }
       });
     });
@@ -45,7 +51,7 @@ export default class Api {
 
     const appliancesSet = new Set();
     this.data.forEach((recipe) => {
-      appliancesSet.add(recipe.appliance);
+      appliancesSet.add(this.normalizeWord(recipe.appliance));
     });
 
     // Return an array of unique appliances
@@ -61,7 +67,7 @@ export default class Api {
     const utensilsSet = new Set();
     this.data.forEach((recipe) => {
       recipe.ustensils.forEach((utensil) => {
-        utensilsSet.add(utensil);
+        utensilsSet.add(this.normalizeWord(utensil));
       });
     });
 
@@ -75,9 +81,10 @@ export default class Api {
       return [];
     }
 
+    const normalizedIngredient = this.normalizeWord(ingredient);
     return this.data.filter((recipe) =>
       recipe.ingredients.some(
-        (ing) => ing.ingredient.toLowerCase() === ingredient.toLowerCase()
+        (ing) => this.normalizeWord(ing.ingredient) === normalizedIngredient
       )
     );
   }
@@ -85,29 +92,34 @@ export default class Api {
   // Filter recipes by multiple tags (ingredients, appliances, utensils)
   getRecipesByTags(ingredients, appliances, utensils) {
     return this.data.filter((recipe) => {
+      // Normalize the ingredients, appliances, and utensils in the recipe
+      const recipeIngredients = recipe.ingredients.map((ing) =>
+        this.normalizeWord(ing.ingredient)
+      );
+      const recipeAppliance = this.normalizeWord(recipe.appliance);
+      const recipeUtensils = recipe.ustensils.map((ut) =>
+        this.normalizeWord(ut)
+      );
+
       // Match ingredients (AND logic)
       const ingredientMatch =
         ingredients.length === 0 ||
         ingredients.every((ingredient) =>
-          recipe.ingredients.some(
-            (ing) => ing.ingredient.toLowerCase() === ingredient.toLowerCase()
-          )
+          recipeIngredients.includes(this.normalizeWord(ingredient))
         );
 
       // Match appliances (AND logic)
       const applianceMatch =
         appliances.length === 0 ||
         appliances
-          .map((appliance) => appliance.toLowerCase())
-          .includes(recipe.appliance.toLowerCase());
+          .map((appliance) => this.normalizeWord(appliance))
+          .includes(recipeAppliance);
 
       // Match utensils (AND logic)
       const utensilMatch =
         utensils.length === 0 ||
         utensils.every((utensil) =>
-          recipe.ustensils.some(
-            (ut) => ut.toLowerCase() === utensil.toLowerCase()
-          )
+          recipeUtensils.includes(this.normalizeWord(utensil))
         );
 
       // Return true only if all conditions are met
