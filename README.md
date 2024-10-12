@@ -1,3 +1,6 @@
+Here's the markdown version of your updated **README.md** file:
+
+```markdown
 # Les Petits Plats - Recipe Search Application
 
 ![Application Architecture](./docs/Les%20petits%20plats%20-%20flowchart.webp)
@@ -32,12 +35,14 @@ js/
  ┃ ┣ Dropdown.js           # Manages dropdown filters (ingredients, appliances, utensils)
  ┃ ┣ FilterManager.js      # Central manager for handling filters and the search term
  ┃ ┣ RecipeSearchManager.js # Handles recipe search with word stemming
+ ┃ ┣ SearchBarController.js # Manages search bar input and UI behavior
  ┃ ┗ TagManager.js         # Manages tags and dynamic filtering behavior
  ┣ data/
  ┃ ┗ recipes.js            # Recipe data (over 1500 items)
  ┣ layout/
  ┃ ┗ RecipeCard.js         # Responsible for rendering individual recipe cards
  ┣ utils/
+ ┃ ┗ BasicStemmerFr.js     # Custom French stemmer for word normalization
  ┃ ┗ RecipeDisplayManager.js # Manages filtered recipe display and results count
  ┗ main.js                 # Entry point, initializes the application
 ```
@@ -71,12 +76,41 @@ flowchart TD
 6. **TagManager.js**: Manages the addition/removal of active filters/tags.
 7. **RecipeDisplayManager.js**: Responsible for rendering the filtered recipes and updating the recipe count.
 
+---
+
+## Class Breakdown
+
+### **1. Api.js**
+**Class Api** manages recipe data interactions, including normalization of search terms (via the `BasicStemmerFr`) and filtering recipes based on ingredients, appliances, or utensils.
+
+### **2. FilterManager.js**
+**Class FilterManager** centralizes the management of active filters (tags), dynamically applying them to the search results and rendering the corresponding recipes.
+
+### **3. TagManager.js**
+**Class TagManager** handles adding and removing tags (for ingredients, appliances, and utensils) and dynamically updating the filter results accordingly.
+
+### **4. RecipeSearchManager.js**
+**Class RecipeSearchManager** processes user search queries and matches them against the recipe dataset using a custom French stemmer for both singular and plural forms.
+
+### **5. SearchBarController.js**
+**Class SearchBarController** handles user input within the search bar, manages the display of the clear button, and coordinates between the filter manager and recipe rendering.
+
+### **6. BasicStemmerFr.js**
+**Class BasicStemmerFr** is a custom French word stemmer that normalizes words (like "banane" and "bananes") to ensure more flexible search results.
+
+### **7. RecipeDisplayManager.js**
+**Class RecipeDisplayManager** manages the display of filtered recipes and ensures that the recipe count is updated dynamically based on search results.
+
+---
+
 ## How It Works
 
 1. Users select filters from dropdowns (ingredients, appliances, utensils) or enter a search term in the search bar.
 2. **FilterManager.js** applies the selected filters and forwards them to the **RecipeSearchManager.js**.
 3. The **RecipeSearchManager.js** processes the input, normalizes the words using the **BasicStemmerFr.js**, and matches them against the recipe data fetched by **Api.js**.
 4. Recipes that match the filters are dynamically rendered using **RecipeCard.js**, while the **RecipeDisplayManager.js** ensures that the recipe count is updated correctly.
+
+---
 
 ## Installation and Setup
 
@@ -97,10 +131,11 @@ flowchart TD
    npm run dev
    ```
 
+---
+
 ## License
 
 This project is licensed under the MIT License.
+```
 
----
-
-This updated README should provide clear guidance on the project structure, workflow, and interaction between components, including the integrated diagram.
+You can now use this **README.md** in your project.
