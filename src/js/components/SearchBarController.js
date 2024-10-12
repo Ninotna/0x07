@@ -8,11 +8,11 @@ export default class SearchBarController {
 
   // Initialize event listeners
   initEventListeners() {
-    const searchBar = document.getElementById('search-bar');
-    const clearButton = document.querySelector('.clear-btn');
+    const searchBar = document.getElementById("search-bar");
+    const clearButton = document.querySelector(".clear-btn");
 
-    searchBar.addEventListener('input', (e) => this.handleInput(e.target));
-    clearButton.addEventListener('click', () => this.clearInput());
+    searchBar.addEventListener("input", (e) => this.handleInput(e.target));
+    clearButton.addEventListener("click", () => this.clearInput());
   }
 
   // Handle input in the search bar
@@ -43,15 +43,15 @@ export default class SearchBarController {
 
   // Clear the search term and reset the filtering to only the active tags
   clearInput() {
-    const input = document.getElementById('search-bar');
-    const clearButton = document.querySelector('.clear-btn');
+    const input = document.getElementById("search-bar");
+    const clearButton = document.querySelector(".clear-btn");
 
     // Clear the search bar
-    input.value = '';
+    input.value = "";
 
     // Hide the "x" button
-    clearButton.classList.add('hidden');
-    clearButton.style.visibility = 'hidden';
+    clearButton.classList.add("hidden");
+    clearButton.style.visibility = "hidden";
 
     // Clear the search term and apply only the active tag filters
     this.clearSearchTermAndApplyTagFilters();
@@ -59,25 +59,31 @@ export default class SearchBarController {
 
   // Clear the search term and apply filters based on active tags only
   clearSearchTermAndApplyTagFilters() {
-    // Clear the search term in the FilterManager
-    this.filterManager.updateSearchTerm(''); // This resets the search term
+    // Effacer le terme de recherche dans le FilterManager
+    this.filterManager.updateSearchTerm("");
 
-    // Get the active tags from the FilterManager
-    const { ingredient, appliance, utensil } = this.filterManager.getActiveTags();
+    // Obtenir les tags actifs
+    const { ingredient, appliance, utensil } =
+      this.filterManager.getActiveTags();
 
-    // Filter recipes based only on the active tags
-    const filteredRecipes = this.searchManager.searchRecipesByTags(ingredient, appliance, utensil);
+    // Filtrer les recettes basées sur les tags actifs
+    const filteredRecipes = this.searchManager.searchRecipesByTags(
+      ingredient,
+      appliance,
+      utensil
+    );
 
-    // Render the recipes that match the active tags
+    // Rendre les recettes filtrées et mettre à jour le compteur
     this.renderCallback(filteredRecipes);
 
-    // Update dropdown options based on the filtered recipes
+    // Mettre à jour les options des dropdowns
     this.filterManager.updateFiltersBasedOnRecipes(filteredRecipes);
   }
 
   // Filter recipes with the search term
   filterRecipes(searchTerm) {
-    const filteredRecipes = this.searchManager.searchRecipes(searchTerm); // Search recipes
+    const filteredRecipes =
+      this.filterManager.filterRecipesByTagsAndSearch(searchTerm);
     this.renderCallback(filteredRecipes); // Render filtered recipes
     this.filterManager.updateFiltersBasedOnRecipes(filteredRecipes); // Update filters
   }

@@ -1,10 +1,14 @@
 import Dropdown from "./Dropdown.js";
 import TagManager from "./TagManager.js";
 import RecipeCard from "../layout/RecipeCard.js";
+// import BasicStemmerFr from "../utils/BasicStemmerFr.js";
+// import RecipeSearchManager from "../components/RecipeSearchManager.js";
 
 export default class FilterManager {
-  constructor(api) {
+  constructor(api, searchManager, stemmer) {
     this.api = api;
+    this.stemmer = stemmer; // Pass the stemmer as a dependency
+    this.searchManager = searchManager; // Instance of RecipeSearchManager
 
     // Initialize TagManager to manage selected tags in the UI
     this.tagManager = new TagManager(this, "tags-container");
@@ -23,20 +27,32 @@ export default class FilterManager {
     this.initDropdowns();
   }
 
+  // Function to normalize and stem words
+  normalizeWord(word) {
+    return this.stemmer.stem(word.toLowerCase().trim());
+  }
+
+  // Function to return active tags
+  getActiveTags() {
+    return this.activeTags;
+  }
+
   // Initialize the dropdowns for filtering
   initDropdowns() {
     this.ingredientsDropdown = new Dropdown(
       "ingredientsFilter",
       "ingredientsDropdown",
       "ingredients",
-      (selectedIngredient) => this.addTagAndUpdate("ingredient", selectedIngredient)
+      (selectedIngredient) =>
+        this.addTagAndUpdate("ingredient", selectedIngredient)
     );
 
     this.appliancesDropdown = new Dropdown(
       "appliancesFilter",
       "appliancesDropdown",
       "appliances",
-      (selectedAppliance) => this.addTagAndUpdate("appliance", selectedAppliance)
+      (selectedAppliance) =>
+        this.addTagAndUpdate("appliance", selectedAppliance)
     );
 
     this.utensilsDropdown = new Dropdown(
@@ -108,7 +124,7 @@ export default class FilterManager {
   // Filter and render recipes based on both active tags and the search term
   updateFiltersAndRenderRecipes() {
     const filteredRecipes = this.filterRecipesByTagsAndSearch();
-    this.renderRecipes(filteredRecipes);
+    this.renderRecipes(filteredRecipes); // Call function that updates the counter
     this.updateFiltersBasedOnRecipes(filteredRecipes);
   }
 
@@ -116,28 +132,22 @@ export default class FilterManager {
   filterRecipesByTagsAndSearch() {
     const { ingredient, appliance, utensil } = this.activeTags;
 
-    // Step 1: Filter recipes based on selected tags
+    // Get filtered recipes from the RecipeSearchManager using normalized tags
     let filteredRecipes = this.api.getRecipesByTags(
       ingredient,
       appliance,
       utensil
     );
 
-    // Step 2: Apply the search term filter on the already filtered recipes
+    // If there is a search term, apply it using the instance of searchManager
     if (this.searchTerm) {
-      filteredRecipes = filteredRecipes.filter((recipe) => {
-        return (
-          recipe.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-          recipe.description
-            .toLowerCase()
-            .includes(this.searchTerm.toLowerCase()) ||
-          recipe.ingredients.some((ing) =>
-            ing.ingredient.toLowerCase().includes(this.searchTerm.toLowerCase())
-          )
-        );
-      });
+      filteredRecipes = this.searchManager.searchRecipes(
+        this.searchTerm,
+        filteredRecipes
+      );
     }
 
+    // Return filtered recipes
     return filteredRecipes;
   }
 
@@ -148,46 +158,73 @@ export default class FilterManager {
 
     container.innerHTML = ""; // Clear previous results
 
-    // Display a message if no recipes are found
+    // If no recipes are found, display a message and set the count to 0
     if (!recipes || recipes.length === 0) {
       container.innerHTML =
         '<p class="text-center text-gray-500">Aucune recette trouvée.</p>';
-      recipeCountElement.textContent = "0 recettes affichées"; // Set recipe count to 0
+      recipeCountElement.textContent = "0 recette affichée";
       return;
     }
 
-    // Render each recipe card
+    // Otherwise, display the recipes and update the count
     recipes.forEach((recipe) => {
       const recipeCard = new RecipeCard(recipe);
       container.appendChild(recipeCard.createRecipeCard());
     });
 
-    // Update the recipe count after rendering
+    // Update the count with the number of found recipes
     recipeCountElement.textContent = `${recipes.length} recette${
       recipes.length > 1 ? "s" : ""
-    } trouvée${recipes.length > 1 ? "s" : ""}`;
+    } affichée${recipes.length > 1 ? "s" : ""}`;
   }
 
-  // Update dropdown options based on the current set of filtered recipes
-  updateFiltersBasedOnRecipes(filteredRecipes) {
-    const ingredients = new Set();
-    const appliances = new Set();
-    const utensils = new Set();
+// Update dropdown options based on the current set of filtered recipes
+// Update dropdown options based on the current set of filtered recipes
+updateFiltersBasedOnRecipes(filteredRecipes) {
+  const ingredients = new Set();
+  const appliances = new Set();
+  const utensils = new Set();
 
-    // Extract ingredients, appliances, and utensils from the filtered recipes
-    filteredRecipes.forEach((recipe) => {
-      recipe.ingredients.forEach((ingredient) => {
-        ingredients.add(ingredient.ingredient);
-      });
-      appliances.add(recipe.appliance);
-      recipe.ustensils.forEach((utensil) => utensils.add(utensil));
+  // Extract ingredients, appliances, and utensils from the filtered recipes
+  filteredRecipes.forEach((recipe) => {
+    recipe.ingredients.forEach((ingredient) => {
+      ingredients.add(ingredient.ingredient); // Keep original display names
     });
 
-    // Update dropdown options and sort them alphabetically
-    this.ingredientsDropdown.updateOptions([...ingredients].sort(), this.activeTags);
-    this.appliancesDropdown.updateOptions([...appliances].sort(), this.activeTags);
-    this.utensilsDropdown.updateOptions([...utensils].sort(), this.activeTags);
-  }
+    appliances.add(recipe.appliance); 
+    recipe.ustensils.forEach((utensil) => utensils.add(utensil));
+  });
+
+  // Normalize the active tags and search terms using the stemmer
+  const activeTags = this.getActiveTags();
+  const normalizedActiveTags = {
+    ingredient: activeTags.ingredient.map(tag => this.normalizeWord(tag)),
+    appliance: activeTags.appliance.map(tag => this.normalizeWord(tag)),
+    utensil: activeTags.utensil.map(tag => this.normalizeWord(tag)),
+  };
+
+  // Normalize the search term using the stemmer
+  const normalizedSearchTerm = this.searchTerm ? this.normalizeWord(this.searchTerm) : null;
+
+  // Filter out active tags and search terms from dropdown options
+  const filteredIngredients = [...ingredients].filter(
+    (ingredient) => !normalizedActiveTags.ingredient.includes(this.normalizeWord(ingredient)) &&
+                    (!normalizedSearchTerm || this.normalizeWord(ingredient) !== normalizedSearchTerm)
+  );
+  const filteredAppliances = [...appliances].filter(
+    (appliance) => !normalizedActiveTags.appliance.includes(this.normalizeWord(appliance)) &&
+                    (!normalizedSearchTerm || this.normalizeWord(appliance) !== normalizedSearchTerm)
+  );
+  const filteredUtensils = [...utensils].filter(
+    (utensil) => !normalizedActiveTags.utensil.includes(this.normalizeWord(utensil)) &&
+                 (!normalizedSearchTerm || this.normalizeWord(utensil) !== normalizedSearchTerm)
+  );
+
+  // Update dropdown options and sort them alphabetically
+  this.ingredientsDropdown.updateOptions(filteredIngredients.sort(), this.activeTags);
+  this.appliancesDropdown.updateOptions(filteredAppliances.sort(), this.activeTags);
+  this.utensilsDropdown.updateOptions(filteredUtensils.sort(), this.activeTags);
+}
 
   // Initialize the filters and populate dropdowns with initial data
   initFilters() {
@@ -200,5 +237,8 @@ export default class FilterManager {
     this.ingredientsDropdown.updateOptions(ingredients.sort(), this.activeTags);
     this.appliancesDropdown.updateOptions(appliances.sort(), this.activeTags);
     this.utensilsDropdown.updateOptions(utensils.sort(), this.activeTags);
+
+    // Ensure all recipes are displayed on initial load
+    this.renderRecipes(this.api.getAllRecipes());
   }
 }

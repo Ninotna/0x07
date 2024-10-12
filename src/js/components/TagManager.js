@@ -1,5 +1,3 @@
-// components/TagManager.js
-
 export default class TagManager {
   constructor(filterManager, containerId) {
     this.filterManager = filterManager;
@@ -18,46 +16,13 @@ export default class TagManager {
       return;
     }
 
-    // Create a new tag element
-    const tag = document.createElement("div");
-    tag.classList.add(
-      "bg-yellow-400",
-      "text-black",
-      "px-4",
-      "py-2",
-      "rounded-full",
-      "flex",
-      "items-center",
-      "gap-2"
-    );
-    tag.setAttribute("data-type", type);
-    tag.setAttribute("data-value", value);
-
-    // Create the tag text element
-    const tagText = document.createElement("span");
-    tagText.textContent = value;
-
-    // Create the close button for removing the tag
-    const closeButton = document.createElement("button");
-    closeButton.innerHTML = "&times;"; // "×" character
-    closeButton.classList.add("text-black", "font-bold", "cursor-pointer");
-    closeButton.addEventListener("click", () => {
-      this.removeTag(type, value); // Remove tag from internal state and filters
-      tag.remove(); // Remove the tag from the UI
-    });
-
-    // Append the text and close button to the tag
-    tag.appendChild(tagText);
-    tag.appendChild(closeButton);
-
-    // Append the tag to the tag container
-    this.container.appendChild(tag);
-
     // Track added tags by type
     if (!this.tags[type]) {
       this.tags[type] = [];
     }
     this.tags[type].push(value);
+
+    this.renderActiveTags(); // Re-render all active tags after adding
   }
 
   /**
@@ -87,10 +52,62 @@ export default class TagManager {
         "filterManager.removeFilter is not defined or is not a function"
       );
     }
+
+    this.renderActiveTags(); // Re-render all active tags after removing
   }
 
-  // New Method: Clear all tags from the UI
+  /**
+   * Clear all tags from the UI.
+   */
   clearAllTags() {
+    this.tags = {}; // Clear all internal tags
     this.container.innerHTML = ""; // Clear all tags from the container
+  }
+
+  /**
+   * Render all active tags from the internal state to the UI.
+   */
+  renderActiveTags() {
+    // Clear the current container
+    this.container.innerHTML = "";
+
+    // Loop through each tag type and render the corresponding tags
+    Object.keys(this.tags).forEach((type) => {
+      this.tags[type].forEach((value) => {
+        // Create a new tag element
+        const tag = document.createElement("div");
+        tag.classList.add(
+          "bg-yellow-400",
+          "text-black",
+          "px-4",
+          "py-2",
+          "rounded-full",
+          "flex",
+          "items-center",
+          "gap-2"
+        );
+        tag.setAttribute("data-type", type);
+        tag.setAttribute("data-value", value);
+
+        // Create the tag text element
+        const tagText = document.createElement("span");
+        tagText.textContent = value;
+
+        // Create the close button for removing the tag
+        const closeButton = document.createElement("button");
+        closeButton.innerHTML = "&times;"; // "×" character
+        closeButton.classList.add("text-black", "font-bold", "cursor-pointer");
+        closeButton.addEventListener("click", () => {
+          this.removeTag(type, value); // Remove tag from internal state and filters
+        });
+
+        // Append the text and close button to the tag
+        tag.appendChild(tagText);
+        tag.appendChild(closeButton);
+
+        // Append the tag to the tag container
+        this.container.appendChild(tag);
+      });
+    });
   }
 }
