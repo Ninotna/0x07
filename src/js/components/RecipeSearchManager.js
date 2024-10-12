@@ -29,43 +29,28 @@ export default class RecipeSearchManager {
       return [];
     }
 
-    const foundRecipes = []; // Array to store found recipes
     const normalizedSearchTerm = this.normalizeWord(searchTerm); // Stemmed search term
     const regex = new RegExp(normalizedSearchTerm, "i"); // Create regex with case-insensitive search
 
-    // Loop through all recipes to find matches
-    for (let i = 0; i < recipes.length; i++) {
-      const recipe = recipes[i];
-
-      // Stemmed recipe name and description
+    // Use array's filter method to find matching recipes
+    return recipes.filter((recipe) => {
+      // Normalize recipe name and description
       const recipeName = this.normalizeWord(recipe.name);
       const recipeDescription = this.normalizeWord(recipe.description);
 
-      let ingredientMatch = false; // Indicator for matching ingredients
-      const ingredientList = recipe.ingredients;
+      // Check if the recipe name or description matches the search term
+      const nameOrDescriptionMatch =
+        regex.test(recipeName) || regex.test(recipeDescription);
 
-      // Loop through the ingredients of the recipe
-      for (let j = 0; j < ingredientList.length; j++) {
-        const ingredient = this.normalizeWord(ingredientList[j].ingredient);
+      // Check if any ingredient matches the search term
+      const ingredientMatch = recipe.ingredients.some((ingredientObj) => {
+        const ingredient = this.normalizeWord(ingredientObj.ingredient);
+        return regex.test(ingredient);
+      });
 
-        // Check if the normalized ingredient matches the regex
-        if (regex.test(ingredient)) {
-          ingredientMatch = true;
-          break; // Exit loop once a match is found
-        }
-      }
-
-      // Check if the normalized search term matches the recipe name, description, or ingredients
-      if (
-        regex.test(recipeName) ||
-        regex.test(recipeDescription) ||
-        ingredientMatch
-      ) {
-        foundRecipes.push(recipe); // Add the found recipe to the array
-      }
-    }
-
-    return foundRecipes;
+      // Return true if either the name/description or any ingredient matches
+      return nameOrDescriptionMatch || ingredientMatch;
+    });
   }
 
   /**
