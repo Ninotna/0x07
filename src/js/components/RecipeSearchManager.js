@@ -150,8 +150,3 @@ export default class RecipeSearchManager {
     });
   }
 }
-<<<<<<< HEAD
-
-export default RecipeSearchManager;
-=======
->>>>>>> main
