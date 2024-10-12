@@ -1,0 +1,13 @@
+classDiagram
+    class TagManager {
+        - filterManager : FilterManager
+        - container : HTMLElement
+        - tags : Object
+        + TagManager(filterManager, containerId)
+        + addTag(type, value)
+        + removeTag(type, value)
+        + clearAllTags()
+    }
+
+    TagManager --> FilterManager : interagit avec
+    TagManager --> HTMLElement : utilise

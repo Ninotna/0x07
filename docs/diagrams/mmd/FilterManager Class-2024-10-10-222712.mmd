@@ -1,0 +1,37 @@
+classDiagram
+    class FilterManager {
+        - api : Object
+        - tagManager : TagManager
+        - activeTags : Object
+        - searchTerm : String
+        - ingredientsDropdown : Dropdown
+        - appliancesDropdown : Dropdown
+        - utensilsDropdown : Dropdown
+        + FilterManager(api)
+        + updateSearchTerm(searchTerm)
+        + addTagAndUpdate(type, value)
+        + removeFilter(type, value)
+        + resetFilters()
+        + updateFiltersAndRenderRecipes()
+        + updateFiltersBasedOnRecipes(filteredRecipes)
+        + renderRecipes(recipes)
+        + initFilters()
+    }
+
+    class Dropdown {
+        + updateOptions(items, tags)
+        + reset()
+    }
+
+    class TagManager {
+        + addTag(type, value)
+        + clearAllTags()
+    }
+
+    class RecipeCard {
+        + createRecipeCard()
+    }
+
+    FilterManager --> Dropdown : utilise
+    FilterManager --> TagManager : utilise
+    FilterManager --> RecipeCard : rend les recettes

@@ -1,0 +1,11 @@
+classDiagram
+    class RecipeDisplayManager {
+        - recipesContainer : HTMLElement
+        - recipeCountElement : HTMLElement
+        + RecipeDisplayManager(recipesContainerId, recipeCountId)
+        + updateRecipeCount(count)
+        + renderRecipes(recipes)
+    }
+
+    RecipeDisplayManager --> HTMLElement : utilise
+    RecipeDisplayManager --> RecipeCard : rend les recettes

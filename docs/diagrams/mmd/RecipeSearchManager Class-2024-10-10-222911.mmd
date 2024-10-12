@@ -1,0 +1,13 @@
+classDiagram
+    class RecipeSearchManager {
+        - recipes : Array
+        - resultContainer : HTMLElement
+        - messageContainer : HTMLElement
+        + RecipeSearchManager(recipes, resultContainerId, messageContainerId)
+        + searchRecipes(searchTerm) Array
+        + displayNoResultsMessage(searchTerm)
+        + displayRecipes(filteredRecipes, searchTerm)
+    }
+
+    RecipeSearchManager --> HTMLElement : utilise
+    RecipeSearchManager --> RecipeCard : rend les recettes
