@@ -11,6 +11,15 @@
   border: none;
   padding: 0;
   margin-right: 10px;
+  color: #000; /* Default text color */
+  border: 1px solid #ccc; /* Default border */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.search-button:hover {
+  background-color: #FFD700; /* Custom yellow on hover */
+  color: #000; /* Optional: keep text color on hover */
 }
 
 .search-button img {
@@ -26,7 +35,7 @@
   outline: none; /* Remove default focus outline */
   width: 100%; /* Full width */
   font-size: 16px;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
   color: #333;
 }
 
@@ -45,7 +54,7 @@
 header {
   padding: 40px 20px;
   height: 955px;
-  background-image: url('../assets/design/background_image.jpg');
+  background-image: url("../assets/design/background_image.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

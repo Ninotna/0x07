@@ -2,7 +2,7 @@
 import { recipes } from "./data/recipes.js"; // Recipe data
 import Api from "./api/Api.js"; // API for managing recipe data
 import FilterManager from "./components/FilterManager.js"; // Manages search filters
-import Dropdown from "./components/Dropdown.js"; // Dropdown functionality
+// import Dropdown from "./components/Dropdown.js"; // Dropdown functionality
 import RecipeDisplayManager from "./utils/RecipeDisplayManager.js"; // Manages recipe display logic
 import RecipeSearchManager from "./components/RecipeSearchManager.js"; // Handles main search functionality
 import RecipeCard from "./layout/RecipeCard.js"; // Manages individual recipe card layout
