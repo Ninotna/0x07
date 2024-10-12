@@ -1,0 +1,86 @@
+classDiagram
+    class Api {
+        - data : Array
+        + Api(data : Array)
+        + getAllRecipes() : Array
+        + getAllIngredients() : Array
+        + getAllAppliances() : Array
+        + getAllUtensils() : Array
+        + getRecipesByIngredient(ingredient : String) : Array
+        + getRecipesByTags(ingredients : Array, appliances : Array, utensils : Array) : Array
+    }
+
+    class Recipe {
+        - name : String
+        - description : String
+        - ingredients : Array
+        - appliance : String
+        - ustensils : Array
+    }
+
+    class RecipeDisplayManager {
+        - recipesContainer : HTMLElement
+        - recipeCountElement : HTMLElement
+        + RecipeDisplayManager(recipesContainerId : String, recipeCountId : String)
+        + updateRecipeCount(count : number)
+        + renderRecipes(recipes : Array)
+    }
+
+    class RecipeSearchManager {
+        - recipes : Array
+        - resultContainer : HTMLElement
+        - messageContainer : HTMLElement
+        + RecipeSearchManager(recipes : Array, resultContainerId : String, messageContainerId : String)
+        + searchRecipes(searchTerm : String) : Array
+        + displayNoResultsMessage(searchTerm : String)
+        + displayRecipes(filteredRecipes : Array, searchTerm : String)
+    }
+
+    class FilterManager {
+        - api : Api
+        - activeTags : Object
+        - searchTerm : String
+        + FilterManager(api : Api)
+        + updateSearchTerm(searchTerm : String)
+        + addTagAndUpdate(type : String, value : String)
+        + removeFilter(type : String, value : String)
+        + resetFilters()
+        + updateFiltersAndRenderRecipes()
+        + updateFiltersBasedOnRecipes(filteredRecipes : Array)
+    }
+
+    class TagManager {
+        - filterManager : FilterManager
+        - container : HTMLElement
+        + TagManager(filterManager : FilterManager, containerId : String)
+        + addTag(type : String, value : String)
+        + removeTag(type : String, value : String)
+        + clearAllTags()
+    }
+
+    class RecipeCard {
+        - recipe : Recipe
+        + RecipeCard(recipe : Recipe)
+        + createRecipeCard() : HTMLElement
+    }
+
+    class Dropdown {
+        - button : HTMLElement
+        - dropdown : HTMLElement
+        - arrowDown : HTMLElement
+        - arrowUp : HTMLElement
+        - filterCallback : Function
+        + Dropdown(buttonId : String, dropdownId : String, arrowIdPrefix : String, filterCallback : Function)
+        + setupEventListeners()
+        + toggleArrows()
+        + updateOptions(items : Array, tags : Object)
+        + reset()
+    }
+
+    Api --> Recipe : manipule des recettes
+    RecipeDisplayManager --> RecipeCard : rend les recettes
+    RecipeSearchManager --> RecipeCard : rend les recettes
+    FilterManager --> Dropdown : utilise
+    FilterManager --> TagManager : utilise
+    TagManager --> FilterManager : interagit avec
+    RecipeCard --> Recipe : affiche la recette

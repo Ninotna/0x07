@@ -1,0 +1,13 @@
+classDiagram
+    class Api {
+        - data : Array
+        + Api(data : Array)
+        + getAllRecipes() : Array
+        + getAllIngredients() : Array
+        + getAllAppliances() : Array
+        + getAllUtensils() : Array
+        + getRecipesByIngredient(ingredient : String) : Array
+        + getRecipesByTags(ingredients : Array, appliances : Array, utensils : Array) : Array
+    }
+
+    Api --> Recipe : manipule des recettes

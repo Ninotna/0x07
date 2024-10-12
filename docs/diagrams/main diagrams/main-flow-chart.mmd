@@ -1,0 +1,10 @@
+flowchart TD
+    A(START) --> B(User Input (Search or Tag Selection))
+    B --> C(TagManager (Add/Remove Tag))
+    C --> D(FilterManager (Update Filters))
+    D --> E{Filter based on Tags?}
+    E -- Yes --> F(RecipeDisplayManager (Render Recipes))
+    E -- No --> G(RecipeSearchManager (Search by Term))
+    G --> F
+    F --> H(END)
+

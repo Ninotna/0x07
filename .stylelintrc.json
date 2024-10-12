@@ -1,0 +1,14 @@
+{
+    "extends": [
+      "stylelint-config-recommended-scss",
+      "stylelint-config-tailwindcss"
+    ],
+    "rules": {
+      "block-no-empty": true,
+      "color-no-invalid-hex": true,
+      "declaration-colon-space-after": "always",
+      "max-empty-lines": 2,
+      "no-eol-whitespace": true
+    }
+  }
+  

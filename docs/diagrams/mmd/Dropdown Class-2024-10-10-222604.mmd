@@ -1,0 +1,18 @@
+classDiagram
+    class Dropdown {
+        - button : HTMLElement
+        - dropdown : HTMLElement
+        - arrowDown : HTMLElement
+        - arrowUp : HTMLElement
+        - filterCallback : Function
+        + Dropdown(buttonId, dropdownId, arrowIdPrefix, filterCallback)
+        + setupEventListeners() 
+        + toggleArrows() 
+        + updateOptions(items, tags) 
+        + updateDropdownItems() 
+        + filterDropdownItems(searchTerm)
+        + reset()
+    }
+    
+    Dropdown ..> HTMLElement : utilise
+    Dropdown ..> Function : utilise
